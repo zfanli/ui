@@ -74,10 +74,6 @@ export default {
 </script>
 
 <style lang="scss">
-html {
-  overflow: hidden;
-}
-
 .container {
   max-height: 100vh;
   overflow: auto;

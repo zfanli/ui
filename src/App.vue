@@ -39,7 +39,18 @@ export default {
         link: "album",
         icon: "mdi-link",
       },
+      {
+        name: "Scrolling Progress",
+        link: "scrolling-progress",
+        icon: "mdi-link",
+      },
     ],
   }),
 };
 </script>
+
+<style lang="scss">
+html {
+  overflow: hidden !important;
+}
+</style>

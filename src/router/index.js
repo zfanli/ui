@@ -19,6 +19,14 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "album" */ "../components/Album.vue"),
   },
+  {
+    path: "/scrolling-progress",
+    name: "ScrollingProgress",
+    component: () =>
+      import(
+        /* webpackChunkName: "s-progress" */ "../components/ScrollingProgress.vue"
+      ),
+  },
 ];
 
 const router = new VueRouter({
