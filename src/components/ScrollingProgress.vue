@@ -1,12 +1,10 @@
 <template>
   <div class="sp-container">
     <div id="first-stage" class="scene first-stage">
-      <div>scrolling down slowly,</div>
-      <div>a progress bar</div>
-      <div>will be showed at the bottom of the page,</div>
-      <div>and</div>
-      <div>the scrolling direction</div>
-      <div>will turn into horizontal.</div>
+      <div>Scrolling down slowly,</div>
+      <div>take a look at the bottom of the page,</div>
+      <div>and be aware of</div>
+      <div>the scrolling direction.</div>
       <v-icon class="scroll-down">mdi-arrow-expand-down</v-icon>
     </div>
     <div id="content" class="scene red lighten-5" ref="content">
@@ -29,8 +27,8 @@
       <v-progress-linear
         class="progress"
         buffer-value="0"
-        color="red"
         height="6"
+        :color="progressBarColor"
         :value="progress * 100"
         stream
         bottom
@@ -51,6 +49,10 @@ export default {
     stickyDuration: {
       type: Number,
       default: 200,
+    },
+    progressBarColor: {
+      type: String,
+      default: "red",
     },
   },
   data: () => ({

@@ -1,19 +1,15 @@
 <template>
   <div>
-    <div class="container">
+    <div class="album">
       <div class="scene">
         <div class="no-pic-left">{{ noLeft ? noLeft : "No picture left" }}</div>
-        <div
-          v-for="(c, i) in colors"
-          :key="i"
-          :class="`card elevation-${4 * (5 - z[i])} ${c} lighten-4`"
-          :style="
-            `transform: translate3d(-50%, ${-y[i]}%, ${z[i] * 2}px);` +
-            `opacity: ${z[i] > 0 ? 0 : 1};` +
-            `transition: all 0.3s ${tf};`
-          "
-          @click="curr = i"
-        ></div>
+        <div class="aspect-ratio-wrapper" v-for="(c, i) in colors" :key="i">
+          <div
+            :class="`card elevation-${4 * (5 + z[i])} ${c} lighten-4`"
+            :style="style(i)"
+            @click="click(i)"
+          ></div>
+        </div>
       </div>
     </div>
     <div class="buttons">
@@ -32,6 +28,10 @@ export default {
   name: "Album",
   props: {
     noLeft: String,
+    duration: {
+      type: Number,
+      default: 0.25,
+    },
   },
   data: () => ({
     curr: 4,
@@ -61,6 +61,20 @@ export default {
     },
   },
   methods: {
+    style(i) {
+      return `transform: translate3d(-50%, ${-this.y[i]}%, ${this.z[i] * 2}px);
+              opacity: ${this.z[i] > 0 ? 0 : 1};
+              transition: all ${this.duration}s ${this.tf};`;
+    },
+    click(i) {
+      const timer = setInterval(() => {
+        if (this.curr === i) {
+          clearInterval(timer);
+        } else {
+          this.curr--;
+        }
+      }, this.duration * 1000);
+    },
     up() {
       this.tf = "ease-in";
       if (this.curr !== -1) this.curr--;
@@ -73,8 +87,8 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.container {
+<style lang="scss" scoped>
+.album {
   max-height: 100vh;
   overflow: auto;
   perspective: 10px;
@@ -99,33 +113,35 @@ export default {
   position: fixed;
 }
 
-.card {
-  height: 30%;
-  width: 40% !important;
-  display: inline-block !important;
-  transition: all 0.3s ease-in;
+.aspect-ratio-wrapper {
+  $start-point: 1;
+  width: 40%;
   position: absolute;
   left: 50%;
   top: 50%;
-  opacity: 1;
-}
 
-$start-point: 1;
-.card {
-  &:nth-child(#{$start-point + 1}) {
-    transform: translate3d(-50%, -90%, -4px);
-  }
-  &:nth-child(#{$start-point + 2}) {
-    transform: translate3d(-50%, -80%, -3px);
-  }
-  &:nth-child(#{$start-point + 3}) {
-    transform: translate3d(-50%, -70%, -2px);
-  }
-  &:nth-child(#{$start-point + 4}) {
-    transform: translate3d(-50%, -60%, -1px);
-  }
-  &:nth-child(#{$start-point + 5}) {
-    transform: translate3d(-50%, -50%, 0px);
+  .card {
+    // height: 30%;
+    padding-bottom: 56.25%;
+    width: 100% !important;
+    display: inline-block !important;
+    opacity: 1;
+
+    &:nth-child(#{$start-point + 1}) {
+      transform: translate3d(-50%, -90%, -4px);
+    }
+    &:nth-child(#{$start-point + 2}) {
+      transform: translate3d(-50%, -80%, -3px);
+    }
+    &:nth-child(#{$start-point + 3}) {
+      transform: translate3d(-50%, -70%, -2px);
+    }
+    &:nth-child(#{$start-point + 4}) {
+      transform: translate3d(-50%, -60%, -1px);
+    }
+    &:nth-child(#{$start-point + 5}) {
+      transform: translate3d(-50%, -50%, 0px);
+    }
   }
 }
 
