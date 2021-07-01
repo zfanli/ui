@@ -7,6 +7,13 @@
           {{ c }}
         </span>
       </div>
+      <v-progress-linear
+        class="progress"
+        :value="progress"
+        color="rgb(88, 219, 220)"
+      >
+        <strong class="progress-value">{{ progress }}%</strong>
+      </v-progress-linear>
     </div>
   </div>
 </template>
@@ -17,24 +24,53 @@ import gsap from "gsap";
 export default {
   name: "Loading",
   data: () => ({
-    //
+    progress: 0,
+    anime: null,
+    timer: null,
   }),
+  methods: {
+    start() {
+      const chars = this.$refs.text.children;
+      this.anime = gsap.from(chars, {
+        scale: 0.8,
+        y: -10,
+        color: "rgb(251, 202, 90)",
+        duration: 0.25,
+        repeat: -1,
+        ease: "power1",
+        stagger: {
+          from: "start",
+          each: 0.2,
+          repeat: 1,
+          yoyo: true,
+        },
+      });
+
+      this.timer = setInterval(() => {
+        if (typeof this.progress === "string") {
+          if (this.progress.indexOf(".") === -1) {
+            this.progress += ".9";
+          } else {
+            this.progress += "9";
+          }
+        } else {
+          this.progress += Math.ceil(Math.random() * 5) + 5;
+          if (this.progress > 99) this.progress = "99";
+        }
+      }, 800);
+    },
+    end() {
+      if (this.anime) {
+        this.anime.kill();
+      }
+      if (this.timer) {
+        clearInterval(this.timer);
+      }
+      this.progress = 100;
+    },
+  },
   mounted() {
-    const chars = this.$refs.text.children;
-    gsap.from(chars, {
-      scale: 0.8,
-      y: -10,
-      color: "rgb(251, 202, 90)",
-      duration: 0.25,
-      repeat: -1,
-      ease: "power1",
-      stagger: {
-        from: "start",
-        each: 0.2,
-        repeat: 1,
-        yoyo: true,
-      },
-    });
+    this.start();
   },
 };
 </script>
@@ -74,6 +110,21 @@ export default {
       span {
         position: relative;
         display: inline-block;
+      }
+    }
+
+    .progress {
+      position: absolute;
+      left: 50%;
+      // width: 210px;
+      transform: translate(-50%, -10px);
+      overflow: unset;
+
+      .progress-value {
+        position: absolute;
+        bottom: -25px;
+        color: gray;
+        font-size: 0.8rem;
       }
     }
   }
