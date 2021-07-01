@@ -27,6 +27,18 @@ const routes = [
         /* webpackChunkName: "s-progress" */ "../components/ScrollingProgress.vue"
       ),
   },
+  {
+    path: "/timeline",
+    name: "Timeline",
+    component: () =>
+      import(/* webpackChunkName: "timeline" */ "../components/Timeline.vue"),
+  },
+  {
+    path: "/animation-demo",
+    name: "AnimationDemo",
+    component: () =>
+      import(/* webpackChunkName: "anime-demo" */ "../views/AnimationDemo.vue"),
+  },
 ];
 
 const router = new VueRouter({

@@ -1,7 +1,7 @@
 <template>
   <div class="sp-container">
     <div id="first-stage" class="scene first-stage">
-      <div>Scrolling down slowly,</div>
+      <div>Scroll down slowly,</div>
       <div>take a look at the bottom of the page,</div>
       <div>and be aware of</div>
       <div>the scrolling direction.</div>

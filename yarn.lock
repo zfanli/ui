@@ -4143,6 +4143,11 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6
   resolved "https://registry.nlark.com/graceful-fs/download/graceful-fs-4.2.6.tgz#ff040b2b0853b23c3d31027523706f1885d76bee"
   integrity sha1-/wQLKwhTsjw9MQJ1I3BvGIXXa+4=
 
+gsap@^3.7.0:
+  version "3.7.0"
+  resolved "https://registry.nlark.com/gsap/download/gsap-3.7.0.tgz?cache=0&sync_timestamp=1623824739846&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fgsap%2Fdownload%2Fgsap-3.7.0.tgz#ebadf467898ddf25011030090f0399cb0e292309"
+  integrity sha1-6630Z4mN3yUBEDAJDwOZyw4pIwk=
+
 gzip-size@^5.0.0:
   version "5.1.1"
   resolved "https://registry.npm.taobao.org/gzip-size/download/gzip-size-5.1.1.tgz#cb9bee692f87c0612b232840a873904e4c135274"

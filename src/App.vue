@@ -9,8 +9,25 @@
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
+
+      <!-- UI parts -->
       <v-list nav dense>
         <v-list-item v-for="item in list" :key="item.name" :to="item.link">
+          <v-list-item-icon>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>
+              {{ item.name }}
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+
+      <!-- Examples -->
+      <v-list subheader nav dense>
+        <v-subheader>Examples</v-subheader>
+        <v-list-item v-for="item in examples" :key="item.name" :to="item.link">
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
@@ -61,6 +78,18 @@ export default {
         link: "scrolling-progress",
         icon: "mdi-link",
       },
+      {
+        name: "Timeline",
+        link: "timeline",
+        icon: "mdi-link",
+      },
+    ],
+    examples: [
+      {
+        name: "Animation Demo",
+        link: "animation-demo",
+        icon: "mdi-link",
+      },
     ],
   }),
 };
@@ -69,6 +98,13 @@ export default {
 <style lang="scss">
 html {
   overflow: hidden !important;
+}
+
+@font-face {
+  font-family: "Rock Salt";
+  font-style: normal;
+  font-weight: 100;
+  src: url(./assets/RockSalt-Regular.ttf) format("ttf");
 }
 </style>
 
