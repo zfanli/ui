@@ -34,6 +34,12 @@ const routes = [
       import(/* webpackChunkName: "timeline" */ "../components/Timeline.vue"),
   },
   {
+    path: "/loading",
+    name: "Loading",
+    component: () =>
+      import(/* webpackChunkName: "loading" */ "../components/Loading.vue"),
+  },
+  {
     path: "/animation-demo",
     name: "AnimationDemo",
     component: () =>

@@ -83,6 +83,11 @@ export default {
         link: "timeline",
         icon: "mdi-link",
       },
+      {
+        name: "Loading",
+        link: "loading",
+        icon: "mdi-link",
+      },
     ],
     examples: [
       {
@@ -98,13 +103,6 @@ export default {
 <style lang="scss">
 html {
   overflow: hidden !important;
-}
-
-@font-face {
-  font-family: "Rock Salt";
-  font-style: normal;
-  font-weight: 100;
-  src: url(./assets/RockSalt-Regular.ttf) format("ttf");
 }
 </style>
 
