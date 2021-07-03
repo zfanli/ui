@@ -50,7 +50,7 @@ export default {
         if (typeof this.progress === "string") {
           if (this.progress.indexOf(".") === -1) {
             this.progress += ".9";
-          } else {
+          } else if (this.progress.length !== 14) {
             this.progress += "9";
           }
         } else {
@@ -66,7 +66,6 @@ export default {
       if (this.timer) {
         clearInterval(this.timer);
       }
-      this.progress = 100;
     },
   },
   mounted() {
@@ -102,14 +101,16 @@ export default {
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 4rem;
-      font-family: "East Sea Dokdo", cursive;
+      transform: translate(-48%, -50%);
+      font-size: 2rem;
+      font-weight: bold;
       color: rgb(88, 219, 220);
+      white-space: nowrap;
 
       span {
         position: relative;
         display: inline-block;
+        padding: 0 5px;
       }
     }
 
