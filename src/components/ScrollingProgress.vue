@@ -1,13 +1,13 @@
 <template>
   <div class="sp-container">
-    <div id="first-stage" class="scene first-stage">
+    <div ref="firstStage" class="scene first-stage">
       <div>Scroll down slowly,</div>
       <div>take a look at the bottom of the page,</div>
       <div>and be aware of</div>
       <div>the scrolling direction.</div>
       <v-icon class="scroll-down">mdi-arrow-expand-down</v-icon>
     </div>
-    <div id="content" class="scene red lighten-5" ref="content">
+    <div ref="content" class="scene red lighten-5 content">
       <div
         class="content-wrapper"
         ref="wrapper"
@@ -35,7 +35,7 @@
         absolute
       ></v-progress-linear>
     </div>
-    <div id="last-stage" class="scene last-stage">
+    <div ref="lastStage" class="scene last-stage">
       <div>the end.</div>
     </div>
   </div>
@@ -70,27 +70,28 @@ export default {
       },
     });
 
+    const { wrapper, content, firstStage, lastStage } = this.$refs;
+
     // bind the first scene into the controller
     new Scene({
-      triggerElement: "#first-stage",
+      triggerElement: firstStage,
       duration: "100%",
     })
-      .setPin("#first-stage", { pushFollowers: false })
-      // .setPin("#first-stage")
+      .setPin(firstStage, { pushFollowers: false })
+      // .setPin(firstStage)
       .addTo(this.controller);
 
     // setup the content width after elements are mounted
-    const { wrapper, content } = this.$refs;
     this.contentWidth =
       wrapper.clientWidth - content.clientWidth + this.stickyDuration;
 
     // bind the content scene into the controller
     new Scene({
-      triggerElement: "#content",
+      triggerElement: content,
       duration: this.contentWidth,
     })
       // .setPin("#content", { pushFollowers: false })
-      .setPin("#content")
+      .setPin(content)
       .on("progress", (e) => {
         const offset = e.progress * this.contentWidth - this.stickyDuration;
         this.offset = Math.max(0, offset);
@@ -100,7 +101,7 @@ export default {
 
     // bind the last scene into the controller
     new Scene({
-      triggerElement: "#last-stage",
+      triggerElement: lastStage,
       duration: "100%",
     })
       // .setPin("#last-stage", { pushFollowers: false })
@@ -137,7 +138,7 @@ export default {
   }
 }
 
-#content {
+.content {
   overflow: hidden;
   position: relative;
 
