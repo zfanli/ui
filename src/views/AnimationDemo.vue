@@ -1,78 +1,215 @@
 <template>
-  <div class="anime-demo">
-    <div class="scene banner">
-      <img
-        v-for="(s, i) in src"
-        :key="s"
-        :src="s"
-        alt="banner"
-        :ref="`b${i}`"
-      />
+  <div
+    class="anime-demo"
+    ref="scroller"
+    :style="{
+      '--image-width': imageWidth + 'px',
+      '--image-height': imageHeight + 'px',
+    }"
+  >
+    <div class="scene" ref="bannerWrapper">
+      <div
+        class="banner"
+        ref="imageWrapper"
+        :style="{ width: imageWidth + 'px' }"
+      >
+        <div class="image-frame" v-for="n in 9" :key="n"></div>
+      </div>
+
+      <div class="logo" :style="`width: ${logoWidth}px;`">
+        <div class="logo-text" :style="`font-size: ${imageWidth * 0.05}px;`">
+          <p>KEANA</p>
+          <p>BLOG</p>
+        </div>
+        <div class="bio">
+          music, milk tea and moods <br />
+          necessary stuffs for creation
+        </div>
+
+        <div class="scroll-indicator">
+          <v-icon class="scroll-icon">mdi-chevron-double-down</v-icon>
+        </div>
+      </div>
     </div>
+
+    <div class="scene red" ref="last"></div>
   </div>
 </template>
 <script>
-import gsap from "gsap";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger.js";
+// import { Controller, Scene } from "scrollmagic";
+
+gsap.registerPlugin(ScrollTrigger);
+ScrollTrigger.defaults({
+  // scroller: this.$refs.scroller,
+  start: "top top",
+  scrub: 1,
+  pinType: "fixed",
+  // pinSpacing: false,
+});
 
 export default {
   name: "AnimationDemo",
   data: () => {
-    const src = [];
-    for (let i = 1; i <= 9; i++) {
-      src.push(require(`../assets/images/banner/b${i}.jpg`));
-    }
     return {
-      src,
+      imageWidth: 0,
+      imageHeight: 0,
+      // timeline: gsap.timeline({ defaults: { overwrite: true } }),
+      timeline: gsap.timeline(),
+      duration: 0.2,
+      delay: 0,
     };
   },
+  computed: {
+    logoWidth() {
+      const width = this.imageWidth * 0.3;
+      return window.innerWidth < width ? window.innerWidth : width;
+    },
+  },
   mounted() {
-    // duration constant
-    const duration = 0.25,
-      delay = 0;
-    // create a timeline and make it repeats infinitely
-    const tl = gsap.timeline({ yoyo: true, repeat: -1 });
-    // animate from the 2nd image to the last one in order
-    for (let i = 1; i < 9; i++) {
-      tl.to(this.$refs["b" + i], {
-        opacity: 1,
-        duration,
-        delay,
-      });
-    }
-    // make the 2nd image to the one before the last invisible
-    for (let i = 1; i < 8; i++) {
-      tl.set(this.$refs["b" + i], {
-        opacity: 0,
-      });
-    }
-    // animate the last one into invisible to make the state back to the initial
-    tl.to(this.$refs.b8, { opacity: 0, duration, delay });
+    this.onResize();
+    window.addEventListener("resize", this.onResize);
+
+    this.start();
+  },
+  beforeUpdate() {
+    this.clear();
+  },
+  updated() {
+    this.start();
+  },
+  methods: {
+    start() {
+      const bannerWrapper = this.$refs.bannerWrapper;
+
+      // duration constant
+      const { duration, delay } = this;
+      // animate from the 2nd image to the last one in order
+      console.log(this.$refs.imageWrapper.children);
+      this.timeline
+        .to(this.$refs.imageWrapper.children, {
+          opacity: 1,
+          duration,
+          delay,
+          repeat: -1,
+          yoyo: true,
+          stagger: {
+            each: duration,
+          },
+        })
+        .to(".banner", {
+          x: -this.imageWidth + bannerWrapper.clientWidth,
+          scrollTrigger: {
+            trigger: bannerWrapper,
+            start: "top top",
+            pin: bannerWrapper,
+          },
+        });
+    },
+    clear() {
+      this.timeline && this.timeline.clear();
+    },
+    onResize() {
+      this.clear();
+
+      const { clientHeight, clientWidth } = this.$refs.bannerWrapper;
+      this.imageWidth =
+        clientHeight / clientWidth <= 0.5626
+          ? clientWidth
+          : clientHeight * (16 / 9);
+      this.imageHeight =
+        clientHeight / clientWidth >= 0.5626
+          ? clientHeight
+          : clientWidth * (9 / 16) - 1;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .anime-demo {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  overflow: auto;
-
-  .banner {
+  .scene {
+    width: 100%;
+    min-height: 100vh;
+    overflow: hidden;
     position: relative;
 
-    img {
-      width: 100%;
-      height: 100%;
-      max-width: 100%;
-      // max-height: 100vh;
+    .banner {
+      position: relative;
+      height: 100vh;
+      max-height: 100%;
+      overflow: hidden;
+      background-image: url(../assets/images/banner/b1.jpg);
+      background-size: 100%;
 
-      &:not(:first-child) {
-        left: 0;
-        opacity: 0;
+      .image-frame {
+        background-size: 100%;
+        max-height: 100%;
+        right: 0;
+        top: 0;
         position: absolute;
+        width: var(--image-width);
+        height: var(--image-height);
+        opacity: 0;
+
+        @for $i from 1 through 9 {
+          $img-no: $i + 1;
+          &:nth-child(#{$i}) {
+            background-image: url(../assets/images/banner/b#{$img-no}.jpg);
+          }
+        }
       }
     }
+
+    .logo {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+
+      .logo-text {
+        color: rgb(220, 185, 155);
+        font-family: "Rock Salt", cursive;
+        background-image: url(../assets/images/banner/jj.png);
+        background-size: contain;
+        background-position: 50%;
+        text-shadow: 0 0 10px rgb(0 0 0 / 30%);
+      }
+
+      .bio {
+        color: rgba(255, 255, 255, 0.3);
+      }
+
+      .scroll-indicator {
+        margin-top: 1rem;
+        color: rgba(255, 255, 255, 0.8);
+        position: relative;
+
+        .scroll-icon {
+          color: inherit;
+          animation: float 6s ease-in-out infinite;
+          position: relative;
+        }
+      }
+    }
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
   }
 }
 </style>
