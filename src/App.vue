@@ -46,9 +46,6 @@
         small
         fab
         @click="showNav = !showNav"
-        :style="`transform: ${
-          showNav ? 'translateX(-50%)' : 'translateX(.5rem)'
-        };`"
       >
         <v-icon
           :style="`transform: ${showNav ? 'rotate(0deg)' : 'rotate(180deg)'};`"
@@ -97,12 +94,17 @@ export default {
       },
     ],
   }),
+  watch: {
+    showNav() {
+      window.dispatchEvent(new Event("resize"));
+    },
+  },
 };
 </script>
 
 <style lang="scss">
 html {
-  overflow: hidden !important;
+  overflow: auto !important;
 }
 </style>
 
@@ -113,8 +115,7 @@ html {
   transition: all 0.25s ease;
   position: absolute;
   top: 0.5rem;
-  left: 0;
-  transform: translateX(-50%);
-  z-index: 100;
+  left: 0.5rem;
+  z-index: 1;
 }
 </style>
