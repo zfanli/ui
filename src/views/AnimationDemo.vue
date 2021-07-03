@@ -1,18 +1,14 @@
 <template>
   <div
     class="anime-demo"
-    ref="scroller"
     :style="{
       '--image-width': imageWidth + 'px',
       '--image-height': imageHeight + 'px',
+      '--image-padding': imagePadding + 'px',
     }"
   >
-    <div class="scene" ref="bannerWrapper">
-      <div
-        class="banner"
-        ref="imageWrapper"
-        :style="{ width: imageWidth + 'px' }"
-      >
+    <div class="scene banner-wrapper" ref="bannerWrapper">
+      <div class="banner" ref="imageWrapper">
         <div class="image-frame" v-for="n in 9" :key="n"></div>
       </div>
 
@@ -38,15 +34,12 @@
 <script>
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger.js";
-// import { Controller, Scene } from "scrollmagic";
+import { debounce } from "lodash";
 
 gsap.registerPlugin(ScrollTrigger);
 ScrollTrigger.defaults({
-  // scroller: this.$refs.scroller,
   start: "top top",
   scrub: 1,
-  pinType: "fixed",
-  // pinSpacing: false,
 });
 
 export default {
@@ -55,73 +48,112 @@ export default {
     return {
       imageWidth: 0,
       imageHeight: 0,
-      // timeline: gsap.timeline({ defaults: { overwrite: true } }),
-      timeline: gsap.timeline(),
+      imagePadding: 0,
+      timeline: null,
+      scrollTrigger: null,
       duration: 0.2,
       delay: 0,
     };
   },
+
   computed: {
+    /**
+     * Keep the aspect ratio of the logo area with the image width.
+     */
     logoWidth() {
       const width = this.imageWidth * 0.3;
       return window.innerWidth < width ? window.innerWidth : width;
     },
   },
+
   mounted() {
+    // Bind resize handler after elements mounted.
     this.onResize();
-    window.addEventListener("resize", this.onResize);
+    window.addEventListener(
+      "resize",
+      debounce(this.onResize, 250, { tailing: true })
+    );
 
-    this.start();
+    ScrollTrigger.saveStyles(this.$refs.bannerWrapper);
   },
-  beforeUpdate() {
-    this.clear();
-  },
-  updated() {
-    this.start();
-  },
+
   methods: {
+    /**
+     * Start animation.
+     */
     start() {
-      const bannerWrapper = this.$refs.bannerWrapper;
-
-      // duration constant
+      const { bannerWrapper, imageWrapper } = this.$refs;
       const { duration, delay } = this;
-      // animate from the 2nd image to the last one in order
-      console.log(this.$refs.imageWrapper.children);
-      this.timeline
-        .to(this.$refs.imageWrapper.children, {
-          opacity: 1,
-          duration,
-          delay,
-          repeat: -1,
-          yoyo: true,
-          stagger: {
-            each: duration,
-          },
-        })
-        .to(".banner", {
-          x: -this.imageWidth + bannerWrapper.clientWidth,
-          scrollTrigger: {
-            trigger: bannerWrapper,
-            start: "top top",
-            pin: bannerWrapper,
-          },
-        });
-    },
-    clear() {
-      this.timeline && this.timeline.clear();
-    },
-    onResize() {
-      this.clear();
 
+      this.timeline = gsap
+        .timeline()
+        // mimic a gif but with transparency transition
+        .fromTo(
+          imageWrapper.children,
+          { opacity: 0 },
+          {
+            opacity: 1,
+            duration,
+            delay,
+            repeat: -1,
+            yoyo: true,
+            stagger: {
+              each: duration,
+            },
+          }
+        )
+        // animate scroll behavior
+        .fromTo(
+          imageWrapper,
+          { x: 0 },
+          { id: "scrollAnimation", x: -1 * this.imagePadding }
+        );
+
+      this.scrollTrigger = ScrollTrigger.create({
+        animation: this.timeline.getById("scrollAnimation"),
+        trigger: bannerWrapper,
+        start: "top top",
+        end: "+=" + this.imagePadding,
+        pin: true,
+        // pinSpacing: false,
+      });
+    },
+
+    /**
+     * Kill the current animation to prepare for the next one.
+     */
+    clear() {
+      this.timeline && this.timeline.kill();
+      this.scrollTrigger && this.scrollTrigger.kill();
+    },
+
+    /**
+     * Re-calculate the width and height of images and re-generate animation.
+     */
+    onResize() {
+      // Re-calculate the width and height.
       const { clientHeight, clientWidth } = this.$refs.bannerWrapper;
-      this.imageWidth =
-        clientHeight / clientWidth <= 0.5626
-          ? clientWidth
-          : clientHeight * (16 / 9);
-      this.imageHeight =
-        clientHeight / clientWidth >= 0.5626
-          ? clientHeight
-          : clientWidth * (9 / 16) - 1;
+      const imageWidth =
+          clientHeight / clientWidth <= 0.5626
+            ? clientWidth
+            : clientHeight * (16 / 9),
+        imageHeight =
+          clientHeight / clientWidth >= 0.5626
+            ? clientHeight
+            : clientWidth * (9 / 16) - 1,
+        imagePadding = Math.max(0, imageWidth - clientWidth);
+
+      // Check and skip animation re-generation if the width and height are not changed,
+      // to prevent unnecessary re-generation on mobile devices triggered by hiding address bar.
+      if (imageWidth !== this.imageWidth || imageHeight !== this.imageWidth) {
+        this.imageWidth = imageWidth;
+        this.imageHeight = imageHeight;
+        this.imagePadding = imagePadding;
+        // Kill current animation.
+        this.clear();
+        // Re-generate the animation.
+        this.start();
+      }
     },
   },
 };
@@ -139,6 +171,7 @@ export default {
       position: relative;
       height: 100vh;
       max-height: 100%;
+      width: var(--image-width);
       overflow: hidden;
       background-image: url(../assets/images/banner/b1.jpg);
       background-size: 100%;
@@ -153,6 +186,7 @@ export default {
         height: var(--image-height);
         opacity: 0;
 
+        // generate image urls for all frames
         @for $i from 1 through 9 {
           $img-no: $i + 1;
           &:nth-child(#{$i}) {
