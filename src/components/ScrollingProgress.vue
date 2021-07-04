@@ -8,11 +8,7 @@
       <v-icon class="scroll-down">mdi-arrow-expand-down</v-icon>
     </div>
     <div ref="content" class="scene red lighten-5 content">
-      <div
-        class="content-wrapper"
-        ref="wrapper"
-        :style="`transform: translateX(-${offset}px)`"
-      >
+      <div class="content-wrapper" ref="wrapper">
         <v-card
           class="card"
           v-for="n in 15"
@@ -41,7 +37,14 @@
   </div>
 </template>
 <script>
-import { Controller, Scene } from "scrollmagic";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+ScrollTrigger.defaults({
+  start: "top top",
+  scrub: 1,
+});
 
 export default {
   name: "ScrollingProgress",
@@ -61,61 +64,52 @@ export default {
     progress: 0,
   }),
   mounted() {
-    // create the scroll magic controller
-    this.controller = new Controller({
-      // use a scroll bar of the custom container instead of a global scroll bar
-      container: ".sp-container",
-      globalSceneOptions: {
-        triggerHook: "onLeave",
-      },
-    });
-
     const { wrapper, content, firstStage, lastStage } = this.$refs;
-
-    // bind the first scene into the controller
-    new Scene({
-      triggerElement: firstStage,
-      duration: "100%",
-    })
-      .setPin(firstStage, { pushFollowers: false })
-      // .setPin(firstStage)
-      .addTo(this.controller);
 
     // setup the content width after elements are mounted
     this.contentWidth =
       wrapper.clientWidth - content.clientWidth + this.stickyDuration;
 
-    // bind the content scene into the controller
-    new Scene({
-      triggerElement: content,
-      duration: this.contentWidth,
-    })
-      // .setPin("#content", { pushFollowers: false })
-      .setPin(content)
-      .on("progress", (e) => {
-        const offset = e.progress * this.contentWidth - this.stickyDuration;
-        this.offset = Math.max(0, offset);
-        this.progress = e.progress;
+    gsap
+      .timeline()
+      .to(firstStage, {
+        // duration: 1,
+        scrollTrigger: {
+          trigger: firstStage,
+          pin: true,
+          pinSpacing: false,
+        },
       })
-      .addTo(this.controller);
-
-    // bind the last scene into the controller
-    new Scene({
-      triggerElement: lastStage,
-      duration: "100%",
-    })
-      // .setPin("#last-stage", { pushFollowers: false })
-      // .setPin("#last-stage")
-      .addTo(this.controller);
+      .fromTo(
+        wrapper,
+        { x: 0 },
+        {
+          x: -this.contentWidth + this.stickyDuration,
+          duration: this.contentWidth - this.stickyDuration,
+          delay: 1,
+          scrollTrigger: {
+            trigger: content,
+            pin: true,
+            onUpdate: (e) => {
+              const offset =
+                e.progress * this.contentWidth - this.stickyDuration;
+              this.offset = Math.max(0, offset);
+              this.progress = e.progress;
+            },
+          },
+        }
+      )
+      .to(lastStage, {
+        scrollTrigger: {
+          trigger: lastStage,
+          pinSpacing: false,
+          pin: true,
+        },
+      });
   },
 };
 </script>
 <style lang="scss" scoped>
-.sp-container {
-  max-height: 100vh;
-  overflow: auto;
-}
-
 .scene {
   height: 100vh;
   width: 100%;
@@ -157,11 +151,6 @@ export default {
       line-height: 150px;
     }
   }
-
-  // .progress {
-  // width: calc(100% - 2rem);
-  // margin: 0 1rem 1rem 1rem;
-  // }
 }
 
 @keyframes float {
