@@ -6,10 +6,16 @@
       transform: `translate(${show ? '0' : '-100%'}, -50%)`,
     }"
   >
-    <div class="nav-item" v-for="item in items" :key="item.name">
+    <a
+      v-for="(item, i) in items"
+      :key="item.name"
+      :class="['nav-item', i === activeIndex ? 'active' : '']"
+      :href="item.anchor"
+      @click.prevent="scrollTo(item.anchor)"
+    >
       <div class="item-name">{{ item.name }}</div>
       <div class="item-name-en">{{ item.en }}</div>
-    </div>
+    </a>
   </nav>
 </template>
 
@@ -20,15 +26,30 @@ export default {
     items: {
       type: Array,
       default: () => [
-        { name: "插画", en: "Illustration" },
-        { name: "岩彩", en: "Mineral-Color" },
-        { name: "水墨", en: "Wash Painting" },
-        { name: "摄影", en: "Photography" },
+        { name: "插画", en: "Illustration", anchor: "#illustration" },
+        { name: "岩彩", en: "Mineral-Color", anchor: "#mineral" },
+        { name: "水墨", en: "Wash Painting", anchor: "#ink-wash" },
+        { name: "摄影", en: "Photography", anchor: "#photography" },
       ],
     },
     show: {
       type: Boolean,
       default: true,
+    },
+    active: {
+      type: String,
+      default: "插画",
+    },
+  },
+  computed: {
+    activeIndex() {
+      return this.items.findIndex((a) => a.name === this.active);
+    },
+  },
+  methods: {
+    scrollTo(an) {
+      const target = document.querySelector(an);
+      window.scrollTo(0, target.offsetTop + 1);
     },
   },
 };
@@ -73,6 +94,13 @@ $line-color: rgb(98, 140, 126);
     text-shadow: 0 0 5px black;
     box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
       0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+    transition: all 0.25s ease;
+    cursor: pointer;
+
+    &.active {
+      background-color: rgb(255 255 255 / 15%);
+      color: white;
+    }
 
     .item-name-en {
       font-size: 9px;

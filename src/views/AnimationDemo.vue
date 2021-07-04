@@ -28,12 +28,16 @@
       </div>
     </div>
 
-    <div class="scene red lighten-4" ref="second"></div>
-    <div class="scene yellow lighten-4"></div>
-    <div class="scene blue lighten-4"></div>
-    <div class="scene purple lighten-4"></div>
+    <div ref="main">
+      <div id="illustration" class="scene red lighten-4"></div>
+      <div id="mineral" class="scene yellow lighten-4"></div>
+      <div id="ink-wash" class="scene blue lighten-4"></div>
+      <div id="photography" class="scene purple lighten-4"></div>
+    </div>
 
-    <custom-nav :show="showNav"></custom-nav>
+    <footer>this is a footer</footer>
+
+    <custom-nav :show="showNav" :active="navActive"></custom-nav>
   </div>
 </template>
 <script>
@@ -62,6 +66,7 @@ export default {
       duration: 0.2,
       delay: 0,
       showNav: false,
+      navActive: "",
     };
   },
 
@@ -85,9 +90,9 @@ export default {
 
     // Pause banner animation due to the performance issue,
     // only play the animation when it's inside the visible area.
-    const { second } = this.$refs;
+    const { main } = this.$refs;
     ScrollTrigger.create({
-      trigger: second,
+      trigger: main,
       onEnter: () => {
         this.timeline.pause();
         this.showNav = true;
@@ -96,6 +101,27 @@ export default {
         this.timeline.resume();
         this.showNav = false;
       },
+    });
+
+    ScrollTrigger.create({
+      trigger: "#illustration",
+      onEnter: () => (this.navActive = "插画"),
+      onEnterBack: () => (this.navActive = "插画"),
+    });
+    ScrollTrigger.create({
+      trigger: "#mineral",
+      onEnter: () => (this.navActive = "岩彩"),
+      onEnterBack: () => (this.navActive = "岩彩"),
+    });
+    ScrollTrigger.create({
+      trigger: "#ink-wash",
+      onEnter: () => (this.navActive = "水墨"),
+      onEnterBack: () => (this.navActive = "水墨"),
+    });
+    ScrollTrigger.create({
+      trigger: "#photography",
+      onEnter: () => (this.navActive = "摄影"),
+      onEnterBack: () => (this.navActive = "摄影"),
     });
   },
 
