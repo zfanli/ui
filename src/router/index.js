@@ -40,6 +40,12 @@ const routes = [
       import(/* webpackChunkName: "loading" */ "../components/Loading.vue"),
   },
   {
+    path: "/parallax",
+    name: "Parallax",
+    component: () =>
+      import(/* webpackChunkName: "parallax" */ "../components/Parallax.vue"),
+  },
+  {
     path: "/animation-demo",
     name: "AnimationDemo",
     component: () =>

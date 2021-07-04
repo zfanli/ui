@@ -85,6 +85,11 @@ export default {
         link: "loading",
         icon: "mdi-link",
       },
+      {
+        name: "Parallax",
+        link: "parallax",
+        icon: "mdi-link",
+      },
     ],
     examples: [
       {
