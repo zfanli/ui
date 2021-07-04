@@ -96,6 +96,7 @@ $line-color: rgb(98, 140, 126);
       0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
     transition: all 0.25s ease;
     cursor: pointer;
+    text-decoration: none;
 
     &.active {
       background-color: rgb(255 255 255 / 15%);
