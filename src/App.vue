@@ -70,11 +70,7 @@ export default {
         link: "album",
         icon: "mdi-link",
       },
-      {
-        name: "Scrolling Progress",
-        link: "scrolling-progress",
-        icon: "mdi-link",
-      },
+
       {
         name: "Timeline",
         link: "timeline",
@@ -90,8 +86,18 @@ export default {
         link: "parallax",
         icon: "mdi-link",
       },
+      {
+        name: "Gallery",
+        link: "gallery",
+        icon: "mdi-link",
+      },
     ],
     examples: [
+      {
+        name: "Scrolling Progress",
+        link: "scrolling-progress",
+        icon: "mdi-link",
+      },
       {
         name: "Animation Demo",
         link: "animation-demo",
@@ -108,6 +114,9 @@ export default {
 </script>
 
 <style lang="scss">
+html {
+  overflow: hidden !important;
+}
 html {
   overflow: auto !important;
 }

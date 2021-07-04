@@ -19,14 +19,7 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "album" */ "../components/Album.vue"),
   },
-  {
-    path: "/scrolling-progress",
-    name: "ScrollingProgress",
-    component: () =>
-      import(
-        /* webpackChunkName: "s-progress" */ "../components/ScrollingProgress.vue"
-      ),
-  },
+
   {
     path: "/timeline",
     name: "Timeline",
@@ -46,6 +39,20 @@ const routes = [
       import(/* webpackChunkName: "parallax" */ "../components/Parallax.vue"),
   },
   {
+    path: "/gallery",
+    name: "Gallery",
+    component: () =>
+      import(/* webpackChunkName: "gallery" */ "../views/GalleryDemo.vue"),
+  },
+  {
+    path: "/scrolling-progress",
+    name: "ScrollingProgress",
+    component: () =>
+      import(
+        /* webpackChunkName: "s-progress" */ "../views/ScrollingProgress.vue"
+      ),
+  },
+  {
     path: "/animation-demo",
     name: "AnimationDemo",
     component: () =>
@@ -55,6 +62,13 @@ const routes = [
 
 const router = new VueRouter({
   routes,
+  scrollBehavior(_, __, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    } else {
+      return { x: 0, y: 0 };
+    }
+  },
 });
 
 export default router;
