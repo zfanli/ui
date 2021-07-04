@@ -28,13 +28,20 @@
       </div>
     </div>
 
-    <div class="scene red" ref="last"></div>
+    <div class="scene red lighten-4" ref="second"></div>
+    <div class="scene yellow lighten-4"></div>
+    <div class="scene blue lighten-4"></div>
+    <div class="scene purple lighten-4"></div>
+
+    <custom-nav :show="showNav"></custom-nav>
   </div>
 </template>
 <script>
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { debounce } from "lodash";
+
+import CustomNav from "../components/CustomNav.vue";
 
 gsap.registerPlugin(ScrollTrigger);
 ScrollTrigger.defaults({
@@ -44,6 +51,7 @@ ScrollTrigger.defaults({
 
 export default {
   name: "AnimationDemo",
+  components: { CustomNav },
   data: () => {
     return {
       imageWidth: 0,
@@ -53,6 +61,7 @@ export default {
       scrollTrigger: null,
       duration: 0.2,
       delay: 0,
+      showNav: false,
     };
   },
 
@@ -74,7 +83,24 @@ export default {
       debounce(this.onResize, 250, { tailing: true })
     );
 
-    ScrollTrigger.saveStyles(this.$refs.bannerWrapper);
+    // Pause banner animation due to the performance issue,
+    // only play the animation when it's inside the visible area.
+    const { second } = this.$refs;
+    ScrollTrigger.create({
+      trigger: second,
+      onEnter: () => {
+        this.timeline.pause();
+        this.showNav = true;
+      },
+      onLeaveBack: () => {
+        this.timeline.resume();
+        this.showNav = false;
+      },
+    });
+  },
+
+  destroyed() {
+    window.removeEventListener("resize", this.onResize);
   },
 
   methods: {
@@ -115,8 +141,12 @@ export default {
         start: "top top",
         end: "+=" + this.imagePadding,
         pin: true,
-        // pinSpacing: false,
       });
+
+      // Pause animation if banner is out of the current view.
+      if (window.pageYOffset > imageWrapper.offsetHeight) {
+        this.timeline.pause();
+      }
     },
 
     /**
@@ -133,6 +163,7 @@ export default {
     onResize() {
       // Re-calculate the width and height.
       const { clientHeight, clientWidth } = this.$refs.bannerWrapper;
+      const { mobile } = this.$vuetify.breakpoint;
       const imageWidth =
           clientHeight / clientWidth <= 0.5626
             ? clientWidth
@@ -143,9 +174,9 @@ export default {
             : clientWidth * (9 / 16) - 1,
         imagePadding = Math.max(0, imageWidth - clientWidth);
 
-      // Check and skip animation re-generation if the width and height are not changed,
+      // Check and skip animation re-generation if the width is not changed on mobile devices,
       // to prevent unnecessary re-generation on mobile devices triggered by hiding address bar.
-      if (imageWidth !== this.imageWidth || imageHeight !== this.imageWidth) {
+      if (!mobile || imageWidth !== this.imageWidth) {
         this.imageWidth = imageWidth;
         this.imageHeight = imageHeight;
         this.imagePadding = imagePadding;
