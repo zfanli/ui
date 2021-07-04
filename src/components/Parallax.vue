@@ -42,6 +42,7 @@ export default {
   .scene {
     height: 100vh;
     width: 100%;
+    background-size: cover;
 
     @for $i from 1 through 4 {
       &.bg#{$i} {
