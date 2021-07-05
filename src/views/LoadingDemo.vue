@@ -1,5 +1,8 @@
 <template>
-  <loading :progress="progress"></loading>
+  <div>
+    <loading :progress="progress"></loading>
+    <div class="scene red lighten-4"></div>
+  </div>
 </template>
 
 <script>
@@ -23,3 +26,10 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.scene {
+  height: 100vh;
+  width: 100%;
+}
+</style>

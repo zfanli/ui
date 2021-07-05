@@ -77,10 +77,15 @@ export default {
 <style lang="scss" scoped>
 .loading {
   height: 100vh;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   transition: all 0.5s ease;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: white;
 
   .loading-wrapper {
     height: 100px;
