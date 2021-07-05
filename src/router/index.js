@@ -30,7 +30,7 @@ const routes = [
     path: "/loading",
     name: "Loading",
     component: () =>
-      import(/* webpackChunkName: "loading" */ "../components/Loading.vue"),
+      import(/* webpackChunkName: "loading" */ "../views/LoadingDemo.vue"),
   },
   {
     path: "/parallax",
