@@ -86,7 +86,8 @@ export default {
           scrollTrigger: {
             trigger: wrapper,
             end: "+=" + (gap + 200),
-            pin: !mobile && gap !== 0,
+            pin: !mobile,
+            // pin: !mobile && gap !== 0,
             onUpdate: (e) => {
               this.progress = e.progress;
             },
@@ -117,6 +118,8 @@ export default {
   min-height: 100vh;
   max-width: 100%;
   overflow: hidden;
+  background-size: cover;
+  background-position: center;
 
   .gallery-body.grid.gallery-row {
     height: 100vh;
