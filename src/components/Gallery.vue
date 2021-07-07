@@ -26,7 +26,7 @@
         ]"
         @click="viewer(i)"
       >
-        <img :src="img.src" alt="image" />
+        <img :src="img.src" alt="image" @load="setupImage" />
       </div>
     </div>
 
@@ -121,10 +121,12 @@ export default {
       );
     }, 0);
   },
+
   destroyed() {
     window.removeEventListener("resize", this.onResize);
     window.removeEventListener("scroll", this.disableScrolling);
   },
+
   methods: {
     onResize() {
       const { clientHeight, clientWidth } = this.$refs.wrapper;
@@ -132,6 +134,23 @@ export default {
         ? Math.ceil((clientWidth / 2) * 0.4)
         : Math.ceil(clientHeight / 4);
       this.cellWidth = Math.ceil(this.cellHeight * 0.45);
+    },
+
+    setupImage({ target }) {
+      const parentWidth = parseInt(
+          window.getComputedStyle(target.parentElement).width
+        ),
+        parentHeight = parseInt(
+          window.getComputedStyle(target.parentElement).height
+        );
+      const imageRatio = target.width / target.height;
+      const width = parentHeight * imageRatio;
+      if (width < parentWidth) {
+        gsap.set(target, {
+          width: parentWidth,
+          height: parentWidth / imageRatio,
+        });
+      }
     },
 
     viewer(i) {
@@ -161,7 +180,6 @@ export default {
           top: -target.offsetTop,
           left: -target.offsetLeft,
           zIndex: 9999,
-          display: "flex",
           duration: 0.25,
           ease: "none",
         }),
@@ -170,7 +188,6 @@ export default {
           {
             width: imageWidth,
             height: imageHeight,
-            minWidth: "unset",
             duration: 0.5,
             // ease: "none",
           },
@@ -289,15 +306,13 @@ export default {
     transition: transform 0.25s ease, box-shadow 0.25s ease;
     position: relative;
     overflow: hidden;
-    justify-content: center;
-    align-items: center;
 
     img {
-      min-width: 100%;
       height: 100%;
       position: absolute;
       left: 50%;
-      transform: translateX(-50%);
+      top: 50%;
+      transform: translate3d(-50%, -50%, 0);
     }
 
     &:hover {
@@ -312,12 +327,6 @@ export default {
       &:hover {
         transform: none;
         box-shadow: none;
-      }
-
-      img {
-        height: 100%;
-        min-width: unset;
-        width: auto;
       }
     }
 
