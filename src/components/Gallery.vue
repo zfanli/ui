@@ -42,7 +42,11 @@
       absolute
     ></v-progress-linear>
 
-    <div class="viewer-panel" v-show="curr !== -1">
+    <div class="gallery-viewer-button-panel" v-show="curr !== -1" ref="panel">
+      <div class="gallery-viewer-previewer" ref="viewer">
+        <img alt="image" />
+      </div>
+
       <v-icon class="action-icon closable" @click="closeViewer">
         mdi-close
       </v-icon>
@@ -98,8 +102,11 @@ export default {
     this.onResize();
     window.addEventListener("resize", this.onResize);
 
-    const { wrapper, body } = this.$refs;
+    const { wrapper, body, panel } = this.$refs;
     const { mobile } = this.$vuetify.breakpoint;
+
+    panel.remove();
+    document.body.append(panel);
 
     setTimeout(() => {
       const gap = body.clientWidth - wrapper.clientWidth;
@@ -133,7 +140,9 @@ export default {
       this.cellHeight = this.$vuetify.breakpoint.mobile
         ? Math.ceil((clientWidth / 2) * 0.4)
         : Math.ceil(clientHeight / 4);
-      this.cellWidth = Math.ceil(this.cellHeight * 0.45);
+      this.cellWidth = this.$vuetify.breakpoint.mobile
+        ? Math.ceil((clientWidth - 24) / 2)
+        : Math.ceil(this.cellHeight * 0.45);
     },
 
     setupImage({ target }) {
@@ -168,34 +177,48 @@ export default {
       })();
 
       // disable mouse wheel actions
-      window.addEventListener("wheel", this.disabling, { passive: false });
-      // disable touch move actions on mobile devices
-      window.addEventListener("touchmove", this.disabling, { passive: false });
+      // window.addEventListener("wheel", this.disabling, { passive: false });
       // prevent scroll events
-      window.addEventListener("scroll", this.disableScrolling);
+      window.addEventListener("scroll", this.disabling);
 
       // keep current viewed index of image
       this.curr = i;
 
       // prepare animation targets
       const target = this.$refs.body.children[i];
+      const viewer = this.$refs.viewer;
       const image = target.children[0];
       const { imageWidth, imageHeight } = this.calculate(image);
       const offset = target.getBoundingClientRect();
 
+      viewer.children[0].src = image.src;
+
       this.viewerAnime = [
-        gsap.to(target, {
-          width: window.innerWidth,
-          height: window.innerHeight,
-          position: "relative",
-          top: -offset.top,
-          left: -offset.left,
-          zIndex: 9999,
-          duration: 0.25,
-          ease: "none",
-        }),
-        gsap.to(
-          image,
+        gsap.fromTo(
+          viewer,
+          {
+            width: offset.width,
+            height: offset.height,
+            top: offset.top,
+            left: offset.left,
+            opacity: 1,
+          },
+          {
+            width: window.innerWidth,
+            height: window.innerHeight,
+            top: 0,
+            left: 0,
+            opacity: 1,
+            duration: 0.25,
+            ease: "none",
+          }
+        ),
+        gsap.fromTo(
+          viewer.children[0],
+          {
+            width: image.width,
+            height: image.height,
+          },
           {
             width: imageWidth,
             height: imageHeight,
@@ -228,37 +251,41 @@ export default {
       if (next < 0 || next >= this.images.length) return;
       const image = this.$refs.body.children[next].children[0];
       const { imageWidth, imageHeight } = this.calculate(image);
+      const previewer = this.$refs.viewer.children[0];
 
-      gsap.to(this.viewerTriggerImage, {
+      gsap.to(previewer, {
         width: imageWidth,
         height: imageHeight,
+        duration: 0.25,
       });
-      this.viewerTriggerImage.src = image.src;
+
+      this.viewerAnime.pop();
+      this.viewerAnime.push(
+        gsap
+          .to(previewer, {
+            width: image.width,
+            height: "auto",
+          })
+          .pause()
+      );
+      previewer.src = image.src;
       this.curr = next;
     },
 
     closeViewer() {
-      this.curr = -1;
       // retrieve mouse wheel actions
       window.removeEventListener("wheel", this.disabling);
-      // retrieve touch move actions
-      window.removeEventListener("touchmove", this.disabling);
       // retrieve scroll events
       window.removeEventListener("scroll", this.disableScrolling);
       // reverse all animations to get back to the initial state
       for (let an of this.viewerAnime) an.reverse();
-      // swap pictures if necessary
-      if (this.viewerTriggerImage.src !== this.viewerTriggerImageBackup) {
-        // do an opacity animation between 2 pictures
-        gsap
-          .timeline()
-          .to(this.viewerTriggerImage, {
-            opacity: 0,
-            onComplete: () =>
-              (this.viewerTriggerImage.src = this.viewerTriggerImageBackup),
-          })
-          .to(this.viewerTriggerImage, { opacity: 1 });
-      }
+
+      gsap.to(this.$refs.viewer, {
+        opacity: 0,
+        delay: 0.25,
+        duration: 0.25,
+        onComplete: () => (this.curr = -1),
+      });
     },
   },
 };
@@ -270,7 +297,6 @@ export default {
 .gallery-wrapper {
   min-height: 100vh;
   max-width: 100%;
-  // overflow: hidden;
   background-size: cover;
   background-position: center;
   position: relative;
@@ -304,7 +330,7 @@ export default {
     width: 100%;
     min-height: 100vh;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: var(--cell-width) var(--cell-width);
     grid-auto-rows: var(--cell-height);
     gap: 0.5rem;
     padding: 0.5rem;
@@ -340,15 +366,6 @@ export default {
         0px 8px 10px 1px rgb(0 0 0 / 14%), 0px 3px 14px 2px rgb(0 0 0 / 12%);
     }
 
-    &.viewer {
-      cursor: unset;
-
-      &:hover {
-        transform: none;
-        box-shadow: none;
-      }
-    }
-
     // disable hover styles on mobile devices due to the inconsistency of user experiences
     @media #{map-get($display-breakpoints, 'sm-and-down')} {
       &:hover {
@@ -357,36 +374,53 @@ export default {
       }
     }
   }
+}
+</style>
 
-  .viewer-panel {
+<style lang="scss">
+.gallery-viewer-button-panel {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+
+  .gallery-viewer-previewer {
     position: fixed;
-    left: 0;
-    top: 0;
-    height: 100vh;
-    width: 100vw;
+    background-color: white;
     overflow: hidden;
 
-    .action-icon {
+    img {
+      height: 100%;
       position: absolute;
-      font-size: 2rem;
-      cursor: pointer;
-      color: white;
-      text-shadow: 0 0 10px black;
+      left: 50%;
+      top: 50%;
+      transform: translate3d(-50%, -50%, 0);
+    }
+  }
 
-      &.closable {
-        right: 1.5rem;
-        top: 1rem;
-      }
+  .action-icon {
+    // use important to fix up the override by vuetify icon component
+    position: absolute !important;
+    font-size: 2rem;
+    cursor: pointer;
+    color: white !important;
+    text-shadow: 0 0 10px black;
 
-      &.prev {
-        top: 50%;
-        left: 1.5rem;
-      }
+    &.closable {
+      right: 1.5rem;
+      top: 1rem;
+    }
 
-      &.next {
-        top: 50%;
-        right: 1.5rem;
-      }
+    &.prev {
+      top: 50%;
+      left: 1.5rem;
+    }
+
+    &.next {
+      top: 50%;
+      right: 1.5rem;
     }
   }
 }
