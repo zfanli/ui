@@ -153,6 +153,10 @@ export default {
       }
     },
 
+    disabling(e) {
+      e.preventDefault();
+    },
+
     viewer(i) {
       // ignore if image viewer is already displayed
       if (this.curr !== -1) return;
@@ -162,6 +166,12 @@ export default {
         const offset = window.pageYOffset;
         return () => window.scrollTo(0, offset);
       })();
+
+      // disable mouse wheel actions
+      window.addEventListener("wheel", this.disabling, { passive: false });
+      // disable touch move actions on mobile devices
+      window.addEventListener("touchmove", this.disabling, { passive: false });
+      // prevent scroll events
       window.addEventListener("scroll", this.disableScrolling);
 
       // keep current viewed index of image
@@ -171,14 +181,15 @@ export default {
       const target = this.$refs.body.children[i];
       const image = target.children[0];
       const { imageWidth, imageHeight } = this.calculate(image);
+      const offset = target.getBoundingClientRect();
 
       this.viewerAnime = [
         gsap.to(target, {
           width: window.innerWidth,
           height: window.innerHeight,
           position: "relative",
-          top: -target.offsetTop,
-          left: -target.offsetLeft,
+          top: -offset.top,
+          left: -offset.left,
           zIndex: 9999,
           duration: 0.25,
           ease: "none",
@@ -228,9 +239,17 @@ export default {
 
     closeViewer() {
       this.curr = -1;
+      // retrieve mouse wheel actions
+      window.removeEventListener("wheel", this.disabling);
+      // retrieve touch move actions
+      window.removeEventListener("touchmove", this.disabling);
+      // retrieve scroll events
       window.removeEventListener("scroll", this.disableScrolling);
+      // reverse all animations to get back to the initial state
       for (let an of this.viewerAnime) an.reverse();
+      // swap pictures if necessary
       if (this.viewerTriggerImage.src !== this.viewerTriggerImageBackup) {
+        // do an opacity animation between 2 pictures
         gsap
           .timeline()
           .to(this.viewerTriggerImage, {
@@ -251,7 +270,7 @@ export default {
 .gallery-wrapper {
   min-height: 100vh;
   max-width: 100%;
-  overflow: hidden;
+  // overflow: hidden;
   background-size: cover;
   background-position: center;
   position: relative;
