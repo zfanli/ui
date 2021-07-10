@@ -143,6 +143,12 @@ export default {
       this.cellWidth = this.$vuetify.breakpoint.mobile
         ? Math.ceil((clientWidth - 24) / 2)
         : Math.ceil(this.cellHeight * 0.45);
+
+      if (this.$refs.body.children) {
+        for (let image of this.$refs.body.children) {
+          image.dispatchEvent(new Event("load"));
+        }
+      }
     },
 
     setupImage({ target }) {
@@ -401,7 +407,7 @@ export default {
   }
 
   .action-icon {
-    // use important to fix up the override by vuetify icon component
+    // use important to fix up the override caused by vuetify icon component
     position: absolute !important;
     font-size: 2rem;
     cursor: pointer;
