@@ -19,7 +19,7 @@
         </div>
         <div class="bio">
           music, milk tea and moods <br />
-          necessary stuffs for creation
+          necessary stuffs for creativity
         </div>
 
         <div class="scroll-indicator">
