@@ -26,7 +26,7 @@
         ]"
         @click="viewer(i)"
       >
-        <img :src="img.src" alt="image" @load="setupImage" />
+        <img :src="img.src" alt="image" />
       </div>
     </div>
 
@@ -147,7 +147,7 @@ export default {
         // resize the size of image themselves
         if (this.$refs.body.children) {
           for (let image of this.$refs.body.children) {
-            image.children[0].dispatchEvent(new Event("load"));
+            this.setupImage({ target: image.children[0] });
           }
         }
       }, 0);
