@@ -94,8 +94,6 @@ export default {
     timeline: null,
     progress: 0,
     curr: -1,
-    viewerTriggerImageBackup: null,
-    viewerTriggerImage: null,
   }),
 
   mounted() {
@@ -136,6 +134,7 @@ export default {
 
   methods: {
     onResize() {
+      // resize the size of image wrappers
       const { clientHeight, clientWidth } = this.$refs.wrapper;
       this.cellHeight = this.$vuetify.breakpoint.mobile
         ? Math.ceil((clientWidth / 2) * 0.4)
@@ -144,20 +143,19 @@ export default {
         ? Math.ceil((clientWidth - 24) / 2)
         : Math.ceil(this.cellHeight * 0.45);
 
-      if (this.$refs.body.children) {
-        for (let image of this.$refs.body.children) {
-          image.dispatchEvent(new Event("load"));
+      setTimeout(() => {
+        // resize the size of image themselves
+        if (this.$refs.body.children) {
+          for (let image of this.$refs.body.children) {
+            image.children[0].dispatchEvent(new Event("load"));
+          }
         }
-      }
+      }, 0);
     },
 
     setupImage({ target }) {
-      const parentWidth = parseInt(
-          window.getComputedStyle(target.parentElement).width
-        ),
-        parentHeight = parseInt(
-          window.getComputedStyle(target.parentElement).height
-        );
+      const parentWidth = target.parentElement.clientWidth,
+        parentHeight = target.parentElement.clientHeight;
       const imageRatio = target.width / target.height;
       const width = parentHeight * imageRatio;
       if (width < parentWidth) {
@@ -189,15 +187,22 @@ export default {
 
       // keep current viewed index of image
       this.curr = i;
+      const target = this.$refs.body.children[this.curr];
+      const image = target.children[0];
+      const viewer = this.$refs.viewer;
+      viewer.children[0].src = image.src;
 
+      this.setupViewer();
+    },
+
+    setupViewer() {
+      if (this.curr === -1) return;
       // prepare animation targets
-      const target = this.$refs.body.children[i];
+      const target = this.$refs.body.children[this.curr];
       const viewer = this.$refs.viewer;
       const image = target.children[0];
       const { imageWidth, imageHeight } = this.calculate(image);
       const offset = target.getBoundingClientRect();
-
-      viewer.children[0].src = image.src;
 
       this.viewerAnime = [
         gsap.fromTo(
@@ -210,8 +215,8 @@ export default {
             opacity: 1,
           },
           {
-            width: window.innerWidth,
-            height: window.innerHeight,
+            width: "100vw",
+            height: "100vh",
             top: 0,
             left: 0,
             opacity: 1,
@@ -234,9 +239,6 @@ export default {
           "-=0.25"
         ),
       ];
-
-      this.viewerTriggerImageBackup = image.src;
-      this.viewerTriggerImage = image;
     },
 
     calculate(image) {
