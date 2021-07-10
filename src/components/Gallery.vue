@@ -45,6 +45,9 @@
     <div class="gallery-viewer-button-panel" v-show="curr !== -1" ref="panel">
       <div class="gallery-viewer-previewer" ref="viewer">
         <img alt="image" />
+        <v-snackbar v-model="alert" :timeout="timeout" centered absolute>
+          {{ info }}
+        </v-snackbar>
       </div>
 
       <v-icon class="action-icon closable" @click="closeViewer">
@@ -94,6 +97,9 @@ export default {
     timeline: null,
     progress: 0,
     curr: -1,
+    info: "",
+    alert: false,
+    timeout: 2000,
   }),
 
   mounted() {
@@ -256,7 +262,11 @@ export default {
 
     showImage(i) {
       const next = this.curr + i;
-      if (next < 0 || next >= this.images.length) return;
+      if (next < 0 || next >= this.images.length) {
+        this.info = "No more images there";
+        this.alert = true;
+        return;
+      }
       const image = this.$refs.body.children[next].children[0];
       const { imageWidth, imageHeight } = this.calculate(image);
       const previewer = this.$refs.viewer.children[0];
