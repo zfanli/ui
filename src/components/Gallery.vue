@@ -153,7 +153,11 @@ export default {
         // resize the size of image themselves
         if (this.$refs.body.children) {
           for (let image of this.$refs.body.children) {
-            this.setupImage({ target: image.children[0] });
+            if (image.children[0].complete) {
+              this.setupImage({ target: image.children[0] });
+            } else {
+              image.children[0].onload = this.setupImage;
+            }
           }
         }
       }, 0);
@@ -397,6 +401,7 @@ export default {
 
 <style lang="scss">
 .gallery-viewer-button-panel {
+  z-index: 20;
   position: fixed;
   left: 0;
   top: 0;
