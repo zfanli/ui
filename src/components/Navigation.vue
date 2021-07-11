@@ -246,6 +246,11 @@ $hamburger-spacing: 8px;
   width: 80px;
   height: 80px;
   transition: transform 0.25s ease;
+  animation: float 6s ease-in-out infinite;
+
+  &.bottom {
+    animation: none;
+  }
 
   &.bottom.open {
     transform: translate(105px, -105px);
@@ -317,6 +322,18 @@ $hamburger-spacing: 8px;
         0
       );
     }
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-30px);
+  }
+  100% {
+    transform: translateY(0px);
   }
 }
 </style>
