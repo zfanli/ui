@@ -58,6 +58,14 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "anime-demo" */ "../views/AnimationDemo.vue"),
   },
+  {
+    path: "/navigation",
+    name: "Navigation",
+    component: () =>
+      import(
+        /* webpackChunkName: "navigation-demo" */ "../views/NavigationDemo.vue"
+      ),
+  },
 ];
 
 const router = new VueRouter({

@@ -91,6 +91,11 @@ export default {
         link: "gallery",
         icon: "mdi-link",
       },
+      {
+        name: "Navigation",
+        link: "navigation",
+        icon: "mdi-link",
+      },
     ],
     examples: [
       {
