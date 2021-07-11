@@ -1,5 +1,11 @@
 <template>
-  <navigation class="nav" :items="items" :menuColor="menuColor"></navigation>
+  <div>
+    <div class="scene nav" ref="navScene">
+      <navigation ref="nav" :items="items" :menuColor="menuColor"></navigation>
+    </div>
+    <div class="scene red lighten-4"></div>
+    <div class="scene green lighten-4"></div>
+  </div>
 </template>
 
 <script>
@@ -19,16 +25,19 @@ export default {
     ],
     menuColor: "#1f675a",
   }),
+  mounted() {
+    //
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-.nav {
-  height: 100%;
+.scene {
+  height: 100vh;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
+  position: relative;
 }
 </style>

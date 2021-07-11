@@ -1,14 +1,13 @@
 <template>
-  <div>
+  <div class="navigator-wrapper" ref="navigator">
     <nav class="menu" :style="colors">
       <input
+        id="navigation-button"
         type="checkbox"
-        href="#"
         class="menu-open"
-        name="menu-open"
-        id="menu-open"
+        v-model="open"
       />
-      <label class="menu-open-button" for="menu-open">
+      <label class="menu-open-button" for="navigation-button">
         <span class="hamburger hamburger-1"></span>
         <span class="hamburger hamburger-2"></span>
         <span class="hamburger hamburger-3"></span>
@@ -62,6 +61,15 @@
 </template>
 
 <script>
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+ScrollTrigger.defaults({
+  start: "top top",
+  scrub: 1,
+});
+
 export default {
   name: "Navigation",
   props: {
@@ -78,6 +86,7 @@ export default {
     },
     menuColor: { type: String, default: "#e91e63" },
   },
+  data: () => ({ open: false, isCenter: true }),
   computed: {
     colors() {
       const colors = {
@@ -87,6 +96,91 @@ export default {
         colors["--item-color-" + (i + 1)] = item.color;
       });
       return colors;
+    },
+  },
+
+  mounted() {
+    const navigator = this.$refs.navigator,
+      navScene = navigator.parentElement,
+      left = 16,
+      bottom = 16,
+      duration = 0.5;
+
+    ScrollTrigger.create({
+      trigger: navigator,
+      onEnter: () => {
+        this.open = false;
+        this.isCenter = false;
+        const parentOffset = navScene.getBoundingClientRect();
+        gsap.fromTo(
+          navigator,
+          {
+            // origin x: `offset left` + `width of parent` / 2 - `half of nav width`
+            left: parentOffset.left + parentOffset.width / 2 - 40,
+            // origin y: `viewpoint height` - `nav height`
+            bottom: window.innerHeight - 80,
+            position: "fixed",
+          },
+          {
+            left,
+            bottom,
+            position: "fixed",
+            duration,
+          }
+        );
+      },
+      onLeaveBack: () => {
+        this.open = false;
+        this.isCenter = true;
+        const parentOffset = navScene.getBoundingClientRect(),
+          offset = navigator.getBoundingClientRect(),
+          fromLeft =
+            (parentOffset.width / 2 -
+              40 +
+              parentOffset.left -
+              left -
+              offset.left) *
+            -1;
+
+        gsap.fromTo(
+          navigator,
+          {
+            // origin x: (`parent offset left` + `parent width` / 2 - `half of nav width`
+            //            - `current nav offset left`) * -1
+            left: fromLeft,
+            bottom: (offset.bottom - 80) * -1,
+            position: "relative",
+          },
+          {
+            left: 0,
+            bottom: 0,
+            position: "relative",
+            duration,
+          }
+        );
+      },
+    });
+  },
+  watch: {
+    open(val) {
+      if (!this.isCenter) {
+        const navigator = this.$refs.navigator;
+        gsap.to(navigator, {
+          x: val ? 105 : 0,
+          y: val ? -105 : 0,
+          duration: 0.25,
+        });
+      }
+    },
+    isCenter(val) {
+      const navigator = this.$refs.navigator;
+      if (val) {
+        gsap.to(navigator, {
+          x: 0,
+          y: 0,
+          duration: 0.25,
+        });
+      }
     },
   },
 };
@@ -109,9 +203,7 @@ $opening-angle: math.$pi * 2;
   border-radius: 100%;
   width: 80px;
   height: 80px;
-  margin-left: -40px;
   position: absolute;
-  top: 20px;
   color: white;
   text-align: center;
   line-height: 80px;
@@ -167,21 +259,23 @@ $hamburger-spacing: 8px;
   }
 }
 
-.menu {
-  @extend %goo;
-  $width: 380px;
-  $height: 250px;
-  position: absolute;
-  left: 50%;
-  margin-left: -$width/2;
-  padding-top: 20px;
-  padding-left: $width/2;
-  width: $width;
-  height: $height;
-  box-sizing: border-box;
-  font-size: 20px;
-  text-align: left;
-  margin-top: 75px;
+.navigator-wrapper {
+  z-index: 10;
+  width: 80px;
+  height: 80px;
+
+  .menu {
+    $width: 380px;
+    $height: 250px;
+    @extend %goo;
+    position: absolute;
+    width: $width;
+    height: $height;
+    box-sizing: border-box;
+    font-size: 20px;
+    text-align: left;
+    // transform: translate(50%, 0%);
+  }
 }
 
 .menu-item {
@@ -220,9 +314,11 @@ $hamburger-spacing: 8px;
 .menu-open:checked ~ .menu-item {
   transition-timing-function: cubic-bezier(0.935, 0, 0.34, 1.33);
   @for $i from 1 through $menu-items {
+    // Start from top -> right -> bottom -> left
     // $angle: ((math.$pi - $opening-angle)/2)+
     //   (($opening-angle/($menu-items - 1)) * ($i - 1));
 
+    // Start from left -> top -> right -> bottom
     $angle: ((math.$pi - $opening-angle))+
       (($opening-angle/($menu-items - 1)) * ($i - 1));
 
