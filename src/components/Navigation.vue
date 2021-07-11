@@ -1,66 +1,76 @@
 <template>
-  <div
-    class="navigator-wrapper"
-    :class="{ open: open, bottom: !isCenter }"
-    ref="navigator"
-  >
-    <nav class="menu" :style="colors">
-      <input
-        id="navigation-button"
-        type="checkbox"
-        class="menu-open"
-        v-model="open"
-      />
-      <label class="menu-open-button" for="navigation-button">
-        <span class="hamburger hamburger-1"></span>
-        <span class="hamburger hamburger-2"></span>
-        <span class="hamburger hamburger-3"></span>
-      </label>
+  <div ref="navigatorWrapper">
+    <div
+      class="navigator-wrapper"
+      :class="{ open: open, bottom: !isCenter }"
+      ref="navigator"
+    >
+      <nav class="menu" :style="colors">
+        <input
+          id="navigation-button"
+          type="checkbox"
+          class="menu-open"
+          v-model="open"
+        />
+        <label class="menu-open-button" for="navigation-button">
+          <span class="hamburger hamburger-1"></span>
+          <span class="hamburger hamburger-2"></span>
+          <span class="hamburger hamburger-3"></span>
+        </label>
 
-      <a
-        v-for="item in items"
-        :key="item.name"
-        :href="item.link"
-        class="menu-item"
-      >
-        {{ item.name }}
-      </a>
-    </nav>
+        <a
+          v-for="item in items"
+          :key="item.name"
+          :href="item.link"
+          class="menu-item"
+        >
+          {{ item.name }}
+        </a>
+      </nav>
 
-    <!-- filters -->
-    <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-      <defs>
-        <filter id="shadowed-goo">
-          <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation="10" />
-          <feColorMatrix
-            in="blur"
-            mode="matrix"
-            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"
-            result="goo"
-          />
-          <feGaussianBlur in="goo" stdDeviation="3" result="shadow" />
-          <feColorMatrix
-            in="shadow"
-            mode="matrix"
-            values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 -0.2"
-            result="shadow"
-          />
-          <feOffset in="shadow" dx="1" dy="1" result="shadow" />
-          <feComposite in2="shadow" in="goo" result="goo" />
-          <feComposite in2="goo" in="SourceGraphic" result="mix" />
-        </filter>
-        <filter id="goo">
-          <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation="10" />
-          <feColorMatrix
-            in="blur"
-            mode="matrix"
-            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"
-            result="goo"
-          />
-          <feComposite in2="goo" in="SourceGraphic" result="mix" />
-        </filter>
-      </defs>
-    </svg>
+      <!-- filters -->
+      <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+        <defs>
+          <filter id="shadowed-goo">
+            <feGaussianBlur
+              in="SourceGraphic"
+              result="blur"
+              stdDeviation="10"
+            />
+            <feColorMatrix
+              in="blur"
+              mode="matrix"
+              values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"
+              result="goo"
+            />
+            <feGaussianBlur in="goo" stdDeviation="3" result="shadow" />
+            <feColorMatrix
+              in="shadow"
+              mode="matrix"
+              values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 -0.2"
+              result="shadow"
+            />
+            <feOffset in="shadow" dx="1" dy="1" result="shadow" />
+            <feComposite in2="shadow" in="goo" result="goo" />
+            <feComposite in2="goo" in="SourceGraphic" result="mix" />
+          </filter>
+          <filter id="goo">
+            <feGaussianBlur
+              in="SourceGraphic"
+              result="blur"
+              stdDeviation="10"
+            />
+            <feColorMatrix
+              in="blur"
+              mode="matrix"
+              values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"
+              result="goo"
+            />
+            <feComposite in2="goo" in="SourceGraphic" result="mix" />
+          </filter>
+        </defs>
+      </svg>
+    </div>
   </div>
 </template>
 
@@ -105,13 +115,14 @@ export default {
 
   mounted() {
     const navigator = this.$refs.navigator,
-      navScene = navigator.parentElement,
+      navigatorWrapper = this.$refs.navigatorWrapper,
+      navScene = navigatorWrapper.parentElement,
       left = 16,
       bottom = 16,
       duration = 0.5;
 
     ScrollTrigger.create({
-      trigger: navigator,
+      trigger: navigatorWrapper,
       onEnter: () => {
         this.open = false;
         this.isCenter = false;
