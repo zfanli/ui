@@ -1,5 +1,9 @@
 <template>
-  <div class="navigator-wrapper" ref="navigator">
+  <div
+    class="navigator-wrapper"
+    :class="{ open: open, bottom: !isCenter }"
+    ref="navigator"
+  >
     <nav class="menu" :style="colors">
       <input
         id="navigation-button"
@@ -161,28 +165,6 @@ export default {
       },
     });
   },
-  watch: {
-    open(val) {
-      if (!this.isCenter) {
-        const navigator = this.$refs.navigator;
-        gsap.to(navigator, {
-          x: val ? 105 : 0,
-          y: val ? -105 : 0,
-          duration: 0.25,
-        });
-      }
-    },
-    isCenter(val) {
-      const navigator = this.$refs.navigator;
-      if (val) {
-        gsap.to(navigator, {
-          x: 0,
-          y: 0,
-          duration: 0.25,
-        });
-      }
-    },
-  },
 };
 </script>
 
@@ -263,6 +245,11 @@ $hamburger-spacing: 8px;
   z-index: 10;
   width: 80px;
   height: 80px;
+  transition: transform 0.25s ease;
+
+  &.bottom.open {
+    transform: translate(105px, -105px);
+  }
 
   .menu {
     $width: 380px;
