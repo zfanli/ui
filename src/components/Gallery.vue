@@ -44,7 +44,7 @@
 
     <div class="gallery-viewer-button-panel" v-show="curr !== -1" ref="panel">
       <div class="gallery-viewer-previewer" ref="viewer">
-        <img alt="image" />
+        <img alt="image" @click="closeViewer" />
         <v-snackbar v-model="alert" :timeout="timeout" centered absolute>
           {{ info }}
         </v-snackbar>
@@ -232,6 +232,8 @@ export default {
             opacity: 1,
             duration: 0.25,
             ease: "none",
+            // prevent flashing before image src updated
+            delay: 0.1,
           }
         ),
         gsap.fromTo(
