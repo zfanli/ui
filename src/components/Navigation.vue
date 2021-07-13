@@ -184,8 +184,9 @@ export default {
 
 //config
 $menu-items: 6+1;
-$open-distance: 105px;
+$open-distance: 90px;
 $opening-angle: math.$pi * 2;
+$diameter: 70px;
 
 %goo {
   filter: url("#shadowed-goo");
@@ -194,12 +195,12 @@ $opening-angle: math.$pi * 2;
 %ball {
   background-color: var(--menu-color);
   border-radius: 100%;
-  width: 80px;
-  height: 80px;
+  width: $diameter;
+  height: $diameter;
   position: absolute;
   color: white;
   text-align: center;
-  line-height: 80px;
+  line-height: $diameter;
   transform: translate3d(0, 0, 0);
   transition: transform ease-out 200ms;
 }
@@ -254,8 +255,8 @@ $hamburger-spacing: 8px;
 
 .navigator-wrapper {
   z-index: 10;
-  width: 80px;
-  height: 80px;
+  width: $diameter;
+  height: $diameter;
   transition: transform 0.25s ease;
   animation: float 6s ease-in-out infinite;
 
@@ -268,9 +269,9 @@ $hamburger-spacing: 8px;
   }
 
   .menu {
+    @extend %goo;
     $width: 380px;
     $height: 250px;
-    @extend %goo;
     position: absolute;
     width: $width;
     height: $height;
