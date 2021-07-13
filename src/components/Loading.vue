@@ -13,7 +13,7 @@
         :value="progress"
         :max="max"
       >
-        <strong class="progress-value">{{ progress }}%</strong>
+        <strong class="progress-value">{{ text }}</strong>
       </v-progress-linear>
     </div>
   </div>
@@ -27,16 +27,26 @@ export default {
   props: {
     progress: { type: Number, default: 0 },
     max: { type: Number, default: 100 },
+    info: { type: String, default: "" },
   },
   data: () => ({
     anime: null,
     disappear: false,
     opacity: 1,
   }),
+  computed: {
+    text() {
+      if (this.info === "") {
+        return this.progress + "%";
+      } else {
+        return this.info.replace("%progress%", this.progress + "%");
+      }
+    },
+  },
   watch: {
     progress(val) {
       if (val === this.max) {
-        this.opacity = 0;
+        setTimeout(() => (this.opacity = 0), 200);
         setTimeout(() => (this.disappear = true), 1000);
       }
     },
@@ -129,10 +139,13 @@ export default {
       overflow: unset;
 
       .progress-value {
+        text-align: center;
         position: absolute;
-        bottom: -25px;
+        bottom: -5px;
         color: gray;
         font-size: 0.8rem;
+        white-space: pre-wrap;
+        transform: translateY(100%);
       }
     }
   }
