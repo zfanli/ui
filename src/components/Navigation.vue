@@ -2,7 +2,7 @@
   <div ref="navigatorWrapper">
     <div
       class="navigator-wrapper"
-      :class="{ open: open, bottom: !isCenter }"
+      :class="{ bottom: !isCenter }"
       ref="navigator"
     >
       <nav class="menu" :style="colors">
@@ -113,6 +113,16 @@ export default {
     },
   },
 
+  watch: {
+    open(val) {
+      if (val && !this.isCenter) {
+        this.openAnime.play();
+      } else {
+        this.openAnime.reverse();
+      }
+    },
+  },
+
   mounted() {
     const navigator = this.$refs.navigator,
       navigatorWrapper = this.$refs.navigatorWrapper,
@@ -120,6 +130,13 @@ export default {
       left = 16,
       bottom = 16,
       duration = 0.5;
+
+    this.openAnime = gsap.to(navigator, {
+      x: 105,
+      y: -105,
+      duration: 0.25,
+      paused: true,
+    });
 
     ScrollTrigger.create({
       trigger: navigatorWrapper,
@@ -157,21 +174,25 @@ export default {
               offset.left) *
             -1;
 
-        gsap.fromTo(
-          navigator,
-          {
-            // origin x: (`parent offset left` + `parent width` / 2 - `half of nav width`
-            //            - `current nav offset left`) * -1
-            left: fromLeft,
-            bottom: (offset.bottom - 80) * -1,
-            position: "relative",
-          },
-          {
-            left: 0,
-            bottom: 0,
-            position: "relative",
-            duration,
-          }
+        setTimeout(
+          () =>
+            gsap.fromTo(
+              navigator,
+              {
+                // origin x: (`parent offset left` + `parent width` / 2 - `half of nav width`
+                //            - `current nav offset left`) * -1
+                left: fromLeft,
+                bottom: (offset.bottom - 80) * -1,
+                position: "relative",
+              },
+              {
+                left: 0,
+                bottom: 0,
+                position: "relative",
+                duration,
+              }
+            ),
+          100
         );
       },
     });
@@ -262,10 +283,6 @@ $hamburger-spacing: 8px;
 
   &.bottom {
     animation: none;
-  }
-
-  &.bottom.open {
-    transform: translate(105px, -105px);
   }
 
   .menu {
