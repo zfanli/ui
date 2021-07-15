@@ -278,7 +278,6 @@ $hamburger-spacing: 8px;
   z-index: 10;
   width: $diameter;
   height: $diameter;
-  transition: transform 0.25s ease;
   animation: float 6s ease-in-out infinite;
 
   &.bottom {
