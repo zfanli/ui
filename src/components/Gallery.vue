@@ -9,14 +9,15 @@
   >
     <div
       ref="body"
-      :class="[
-        'gallery-body',
-        'grid',
-        $vuetify.breakpoint.mobile ? 'gallery-column' : 'gallery-row',
-      ]"
+      :class="{
+        'gallery-body': true,
+        grid: true,
+        'gallery-column': $vuetify.breakpoint.mobile,
+        'gallery-row': !$vuetify.breakpoint.mobile,
+      }"
     >
       <div
-        v-for="(img, i) in images"
+        v-for="(img, i) in displayImages"
         :key="i"
         :class="[
           'item',
@@ -27,6 +28,14 @@
         @click="viewer(i)"
       >
         <img :src="img.src" alt="image" />
+      </div>
+
+      <div
+        class="show-more"
+        v-if="displayImages.length !== images.length"
+        @click="showMore"
+      >
+        Show More
       </div>
     </div>
 
@@ -89,6 +98,10 @@ export default {
       type: String,
       default: "red",
     },
+    defaultDisplayCount: {
+      type: Number,
+      default: 12,
+    },
   },
 
   data: () => ({
@@ -100,37 +113,26 @@ export default {
     info: "",
     alert: false,
     timeout: 2000,
+    showAll: false,
   }),
+
+  computed: {
+    displayImages() {
+      if (this.showAll) return this.images;
+      else return this.images.slice(0, this.defaultDisplayCount);
+    },
+  },
 
   mounted() {
     this.onResize();
     window.addEventListener("resize", this.onResize);
 
-    const { wrapper, body, panel } = this.$refs;
-    const { mobile } = this.$vuetify.breakpoint;
+    const { panel } = this.$refs;
 
     panel.remove();
     document.body.append(panel);
 
-    setTimeout(() => {
-      const gap = body.clientWidth - wrapper.clientWidth;
-      this.timeline = gsap.timeline().fromTo(
-        body,
-        { x: 0 },
-        {
-          x: mobile ? 0 : -gap,
-          scrollTrigger: {
-            trigger: wrapper,
-            end: "+=" + (gap + 200),
-            pin: !mobile,
-            // pin: !mobile && gap !== 0,
-            onUpdate: (e) => {
-              this.progress = e.progress;
-            },
-          },
-        }
-      );
-    }, 0);
+    this.bindAnimation();
   },
 
   destroyed() {
@@ -152,7 +154,9 @@ export default {
       setTimeout(() => {
         // resize the size of image themselves
         if (this.$refs.body.children) {
-          for (let image of this.$refs.body.children) {
+          for (let image of Array.from(this.$refs.body.children).filter((a) =>
+            a.classList.contains("item")
+          )) {
             if (image.children[0].complete) {
               this.setupImage({ target: image.children[0] });
             } else {
@@ -160,6 +164,40 @@ export default {
             }
           }
         }
+      }, 0);
+    },
+
+    bindAnimation() {
+      if (this.timeline) this.timeline.kill();
+      const { wrapper, body } = this.$refs;
+      const { mobile } = this.$vuetify.breakpoint;
+      setTimeout(() => {
+        const gap = body.clientWidth - wrapper.clientWidth;
+        this.timeline = ScrollTrigger.create({
+          animation: gsap.fromTo(
+            body,
+            { x: 0 },
+            {
+              x: mobile ? 0 : -gap,
+            }
+          ),
+          trigger: wrapper,
+          end: "+=" + (gap + 200),
+          pin: !mobile,
+          // pin: !mobile && gap !== 0,
+          onUpdate: (e) => {
+            this.progress = e.progress;
+          },
+        });
+      }, 0);
+    },
+
+    showMore() {
+      this.showAll = true;
+      this.onResize();
+      setTimeout(() => {
+        this.bindAnimation();
+        window.dispatchEvent(new Event("resize"));
       }, 0);
     },
 
@@ -395,6 +433,47 @@ export default {
       &:hover {
         transform: none;
         box-shadow: none;
+      }
+    }
+  }
+
+  .gallery-body.grid {
+    .show-more {
+      align-self: center;
+      grid-column-end: span 2;
+      grid-row-end: span 2;
+      font-size: 0.7rem;
+      right: 0;
+      text-align: center;
+      justify-self: center;
+      text-transform: uppercase;
+      font-family: "Rock Salt", cursive;
+      cursor: pointer;
+      text-shadow: 0px 5px 5px rgb(0 0 0 / 20%), 0px 4px 5px rgb(0 0 0 / 14%),
+        0px 1px 7px rgb(0 0 0 / 12%);
+      transition: text-shadow 0.25s ease;
+      width: 100px;
+      padding: 0.5rem;
+      color: white;
+      font-weight: bold;
+      position: relative;
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff4;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        z-index: -1;
+      }
+
+      &:hover {
+        text-shadow: 0px 5px 5px rgb(0 0 0 / 20%), 0px 8px 10px rgb(0 0 0 / 14%),
+          0px 3px 14px rgb(0 0 0 / 12%);
       }
     }
   }
