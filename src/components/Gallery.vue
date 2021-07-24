@@ -30,12 +30,8 @@
         <img :src="img.src" alt="image" />
       </div>
 
-      <div
-        class="show-more"
-        v-if="displayImages.length !== images.length"
-        @click="showMore"
-      >
-        Show More
+      <div class="show-more" @click="showMore" v-if="shouldShowMore">
+        {{ showAll ? "Show Less" : "Show More" }}
       </div>
     </div>
 
@@ -121,6 +117,13 @@ export default {
       if (this.showAll) return this.images;
       else return this.images.slice(0, this.defaultDisplayCount);
     },
+    shouldShowMore() {
+      // return this.images.length - this.defaultDisplayCount > 0
+      return (
+        this.images.length - this.defaultDisplayCount > 0 &&
+        this.displayImages.length !== this.images.length
+      );
+    },
   },
 
   mounted() {
@@ -193,7 +196,7 @@ export default {
     },
 
     showMore() {
-      this.showAll = true;
+      this.showAll = !this.showAll;
       this.onResize();
       setTimeout(() => {
         this.bindAnimation();
