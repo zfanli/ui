@@ -10,24 +10,15 @@
         </v-list-item-content>
       </v-list-item>
 
-      <!-- UI parts -->
-      <v-list nav dense>
-        <v-list-item v-for="item in list" :key="item.name" :to="item.link">
-          <v-list-item-icon>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>
-              {{ item.name }}
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-
-      <!-- Examples -->
-      <v-list subheader nav dense>
-        <v-subheader>Examples</v-subheader>
-        <v-list-item v-for="item in examples" :key="item.name" :to="item.link">
+      <v-list
+        v-for="(nav, idx) in links"
+        :key="idx"
+        :subheader="!!nav.subheader"
+        nav
+        dense
+      >
+        <v-subheader v-if="!!nav.subheader">{{ nav.subheader }}</v-subheader>
+        <v-list-item v-for="item in nav.items" :key="item.name" :to="item.link">
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
@@ -39,6 +30,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
+
     <v-main>
       <v-btn
         class="switcher"
@@ -64,56 +56,64 @@ export default {
 
   data: () => ({
     showNav: true,
-    list: [
-      {
-        name: "Album",
-        link: "album",
-        icon: "mdi-link",
-      },
+    links: {
+      parts: {
+        subheader: "Parts",
+        items: [
+          {
+            name: "Album",
+            link: "album",
+            icon: "mdi-link",
+          },
 
-      {
-        name: "Timeline",
-        link: "timeline",
-        icon: "mdi-link",
+          {
+            name: "Timeline",
+            link: "timeline",
+            icon: "mdi-link",
+          },
+          {
+            name: "Loading",
+            link: "loading",
+            icon: "mdi-link",
+          },
+          {
+            name: "Parallax",
+            link: "parallax",
+            icon: "mdi-link",
+          },
+          {
+            name: "Gallery",
+            link: "gallery",
+            icon: "mdi-link",
+          },
+          {
+            name: "Navigation",
+            link: "navigation",
+            icon: "mdi-link",
+          },
+        ],
       },
-      {
-        name: "Loading",
-        link: "loading",
-        icon: "mdi-link",
+      examples: {
+        subheader: "Examples",
+        items: [
+          {
+            name: "Scrolling Progress",
+            link: "scrolling-progress",
+            icon: "mdi-link",
+          },
+          {
+            name: "Animation Demo",
+            link: "animation-demo",
+            icon: "mdi-link",
+          },
+          {
+            name: "Text Effect: Hover Transition",
+            link: "text-effect-hover-transition",
+            icon: "mdi-link",
+          },
+        ],
       },
-      {
-        name: "Parallax",
-        link: "parallax",
-        icon: "mdi-link",
-      },
-      {
-        name: "Gallery",
-        link: "gallery",
-        icon: "mdi-link",
-      },
-      {
-        name: "Navigation",
-        link: "navigation",
-        icon: "mdi-link",
-      },
-    ],
-    examples: [
-      {
-        name: "Scrolling Progress",
-        link: "scrolling-progress",
-        icon: "mdi-link",
-      },
-      {
-        name: "Animation Demo",
-        link: "animation-demo",
-        icon: "mdi-link",
-      },
-      {
-        name: "Text Effect: Hover Transition",
-        link: "text-effect-hover-transition",
-        icon: "mdi-link",
-      },
-    ],
+    },
   }),
   watch: {
     showNav() {
