@@ -108,6 +108,11 @@ export default {
         link: "animation-demo",
         icon: "mdi-link",
       },
+      {
+        name: "Text Effect: Hover Transition",
+        link: "text-effect-hover-transition",
+        icon: "mdi-link",
+      },
     ],
   }),
   watch: {

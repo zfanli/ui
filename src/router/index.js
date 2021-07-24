@@ -66,6 +66,14 @@ const routes = [
         /* webpackChunkName: "navigation-demo" */ "../views/NavigationDemo.vue"
       ),
   },
+  {
+    path: "/text-effect-hover-transition",
+    name: "TextEffectHoverTransition",
+    component: () =>
+      import(
+        /* webpackChunkName: "text-effect-hover-transition" */ "../views/TextEffectHoverTransition.vue"
+      ),
+  },
 ];
 
 const router = new VueRouter({
