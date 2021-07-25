@@ -55,7 +55,7 @@ export default {
   name: "App",
 
   data: () => ({
-    showNav: true,
+    showNav: false,
     links: {
       parts: {
         subheader: "Parts",
@@ -77,17 +77,17 @@ export default {
             icon: "mdi-link",
           },
           {
-            name: "Parallax",
+            name: "Parallax: GSAP",
             link: "parallax",
             icon: "mdi-link",
           },
           {
-            name: "Gallery",
+            name: "Gallery: GSAP",
             link: "gallery",
             icon: "mdi-link",
           },
           {
-            name: "Navigation",
+            name: "Navigation: GSAP + SVG",
             link: "navigation",
             icon: "mdi-link",
           },
@@ -109,6 +109,11 @@ export default {
           {
             name: "Text Effect: Hover Transition",
             link: "text-effect-hover-transition",
+            icon: "mdi-link",
+          },
+          {
+            name: "Parallax: Pure CSS",
+            link: "parallax-pure-css",
             icon: "mdi-link",
           },
         ],

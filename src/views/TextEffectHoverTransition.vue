@@ -18,15 +18,24 @@ import { gsap } from "gsap";
 export default {
   data: () => ({ offsetX: 0, offsetY: 0 }),
   mounted() {
-    const offset = this.$refs.body.getBoundingClientRect();
-    this.offsetX = offset.left;
-    this.offsetY = offset.top;
-    this.$refs.body.addEventListener("mousemove", this.mouseMove);
+    this.onResize();
+    window.addEventListener("resize", this.onResize);
   },
   destroyed() {
-    this.$refs.body.removeEventListener("mousemove", this.mouseMove);
+    this.cleanup();
+    window.removeEventListener("resize", this.onResize);
   },
   methods: {
+    onResize() {
+      this.cleanup();
+      const offset = this.$refs.body.getBoundingClientRect();
+      this.offsetX = offset.left;
+      this.offsetY = offset.top;
+      this.$refs.body.addEventListener("mousemove", this.mouseMove);
+    },
+    cleanup() {
+      this.$refs.body.removeEventListener("mousemove", this.mouseMove);
+    },
     mouseMove(event) {
       const { clientX, clientY } = event;
       const x = clientX - this.offsetX,

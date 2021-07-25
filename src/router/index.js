@@ -74,6 +74,14 @@ const routes = [
         /* webpackChunkName: "text-effect-hover-transition" */ "../views/TextEffectHoverTransition.vue"
       ),
   },
+  {
+    path: "/parallax-pure-css",
+    name: "ParallaxPureCss",
+    component: () =>
+      import(
+        /* webpackChunkName: "ParallaxPureCss" */ "../views/ParallaxPureCss.vue"
+      ),
+  },
 ];
 
 const router = new VueRouter({
