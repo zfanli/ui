@@ -55,7 +55,7 @@ export default {
   name: "App",
 
   data: () => ({
-    showNav: false,
+    showNav: true,
     links: {
       parts: {
         subheader: "Parts",
@@ -65,20 +65,14 @@ export default {
             link: "album",
             icon: "mdi-link",
           },
-
           {
             name: "Timeline",
             link: "timeline",
             icon: "mdi-link",
           },
           {
-            name: "Loading",
+            name: "Loading: Animation",
             link: "loading",
-            icon: "mdi-link",
-          },
-          {
-            name: "Parallax: GSAP",
-            link: "parallax",
             icon: "mdi-link",
           },
           {
@@ -97,12 +91,12 @@ export default {
         subheader: "Examples",
         items: [
           {
-            name: "Scrolling Progress",
+            name: "Progress: ScrollTrigger",
             link: "scrolling-progress",
             icon: "mdi-link",
           },
           {
-            name: "Animation Demo",
+            name: "Banner: GIF animation",
             link: "animation-demo",
             icon: "mdi-link",
           },
@@ -112,7 +106,12 @@ export default {
             icon: "mdi-link",
           },
           {
-            name: "Parallax: Pure CSS",
+            name: "Parallax: Scroll, GSAP",
+            link: "parallax",
+            icon: "mdi-link",
+          },
+          {
+            name: "Parallax: Scroll, Pure CSS",
             link: "parallax-pure-css",
             icon: "mdi-link",
           },
