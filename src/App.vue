@@ -116,6 +116,11 @@ export default {
             link: "parallax-pure-css",
             icon: "mdi-link",
           },
+          {
+            name: "Parallax: Mouse Move",
+            link: "mouse-move-parallax",
+            icon: "mdi-link",
+          },
         ],
       },
     },

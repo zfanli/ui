@@ -82,6 +82,14 @@ const routes = [
         /* webpackChunkName: "ParallaxPureCss" */ "../views/ParallaxPureCss.vue"
       ),
   },
+  {
+    path: "/mouse-move-parallax",
+    name: "MouseMoveParallax",
+    component: () =>
+      import(
+        /* webpackChunkName: "MouseMoveParallax" */ "../views/MouseMoveParallax.vue"
+      ),
+  },
 ];
 
 const router = new VueRouter({

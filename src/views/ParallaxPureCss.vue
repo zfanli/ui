@@ -34,6 +34,7 @@ export default {};
   overflow-x: hidden;
   overflow-y: auto;
   // overflow: hidden;
+  scroll-snap-type: y mandatory;
 
   &,
   * {
@@ -47,6 +48,7 @@ export default {};
     background-color: tomato;
     position: relative;
     z-index: 30;
+    scroll-snap-align: start;
   }
 
   .parallax-group {
@@ -54,6 +56,7 @@ export default {};
     position: relative;
     transform-style: preserve-3d;
     z-index: 20;
+    scroll-snap-align: start;
 
     &.parallax-group1 {
       & > .parallax-layer:first-child {
@@ -88,7 +91,9 @@ export default {};
     @include align-center();
     height: 100vh;
     background-color: teal;
-    z-index: 0;
+    position: relative;
+    z-index: 20;
+    scroll-snap-align: start;
   }
 }
 </style>
