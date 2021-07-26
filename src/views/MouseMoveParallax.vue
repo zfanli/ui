@@ -9,13 +9,11 @@
     <div class="offset">
       <input type="range" v-model="offset" min="0" max="100" />
       <span>{{ offset }}</span>
-      <small class="d-block text-center">
+      <small class="d-block">
         Adjust the degree of the effect by changing the value of the range
         above.
       </small>
-      <small class="d-block text-center">
-        *This effect is not for mobile device!
-      </small>
+      <small class="d-block"> *This effect is not for mobile device! </small>
     </div>
   </div>
 </template>
@@ -27,6 +25,8 @@ export default {
   }),
   mounted() {
     window.addEventListener("mousemove", this.parallax);
+    if (this.$vuetify.breakpoint.mobile)
+      this.$refs.stage.style.transition = "transform .2s ease";
   },
   destroyed() {
     window.removeEventListener("mousemove", this.parallax);
@@ -109,9 +109,12 @@ export default {
     left: 50%;
     bottom: 0.5rem;
     transform: translateX(-50%);
+    width: 100%;
+    text-align: center;
 
     input {
       width: 400px;
+      max-width: calc(100vw - 4rem);
     }
   }
 }
