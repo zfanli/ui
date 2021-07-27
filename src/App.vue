@@ -120,6 +120,11 @@ export default {
             link: "mouse-move-parallax",
             icon: "mdi-link",
           },
+          {
+            name: "Markdown Editor",
+            link: "markdown-editor",
+            icon: "mdi-link",
+          },
         ],
       },
     },

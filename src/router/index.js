@@ -90,6 +90,14 @@ const routes = [
         /* webpackChunkName: "MouseMoveParallax" */ "../views/MouseMoveParallax.vue"
       ),
   },
+  {
+    path: "/markdown-editor",
+    name: "MarkdownEditor",
+    component: () =>
+      import(
+        /* webpackChunkName: "MarkdownEditor" */ "../views/MarkdownEditor.vue"
+      ),
+  },
 ];
 
 const router = new VueRouter({
