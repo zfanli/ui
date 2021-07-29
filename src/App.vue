@@ -1,53 +1,29 @@
 <template>
-  <v-app>
-    <v-navigation-drawer app v-model="showNav">
-      <v-list-item to="/">
-        <v-list-item-content>
-          <v-list-item-title class="text-h6">UI demos</v-list-item-title>
-          <v-list-item-subtitle>
-            The demonstration for ui parts.
-          </v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-
-      <v-list
-        v-for="(nav, idx) in links"
-        :key="idx"
-        :subheader="!!nav.subheader"
-        nav
-        dense
-      >
-        <v-subheader v-if="!!nav.subheader">{{ nav.subheader }}</v-subheader>
-        <v-list-item v-for="item in nav.items" :key="item.name" :to="item.link">
-          <v-list-item-icon>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>
-              {{ item.name }}
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-
-    <v-main>
-      <v-btn
-        class="switcher"
-        color="gray"
-        small
-        fab
-        @click="showNav = !showNav"
-      >
-        <v-icon
-          :style="`transform: ${showNav ? 'rotate(0deg)' : 'rotate(180deg)'};`"
+  <div class="app">
+    <nav :class="{ open: showNav }">
+      <header>
+        <div class="home" @click="to('/')">
+          <div class="title">UI Code Snippets</div>
+          <div class="desc">The demonstration for ui parts.</div>
+        </div>
+        <div class="menu mdi mdi-menu" @click="showNav = !showNav"></div>
+      </header>
+      <section class="nav-group" v-for="(nav, idx) in links" :key="idx">
+        <div class="subheader" v-if="!!nav.subheader">{{ nav.subheader }}</div>
+        <div
+          class="nav-item"
+          v-for="item in nav.items"
+          :key="item.name"
+          @click="to(item.link)"
         >
-          mdi-chevron-left
-        </v-icon>
-      </v-btn>
-      <router-view />
-    </v-main>
-  </v-app>
+          <i :class="['mdi', item.icon]"></i>
+          <span>{{ item.name }}</span>
+        </div>
+      </section>
+    </nav>
+
+    <router-view class="content" />
+  </div>
 </template>
 
 <script>
@@ -134,10 +110,17 @@ export default {
       window.dispatchEvent(new Event("resize"));
     },
   },
+  methods: {
+    to(link) {
+      this.$router.push(link);
+    },
+  },
 };
 </script>
 
 <style lang="scss">
+@import "~bootstrap/scss/bootstrap.scss";
+
 html {
   overflow: hidden !important;
 }
@@ -147,13 +130,98 @@ html {
 </style>
 
 <style lang="scss" scoped>
-.switcher {
-  background-color: white;
-  border-color: gray;
-  transition: all 0.25s ease;
-  position: absolute;
-  top: 0.5rem;
-  left: 0.5rem;
-  z-index: 1;
+.app {
+  min-height: 100vh;
+  display: flex;
+
+  nav {
+    flex-shrink: 0;
+    padding: 0.5rem;
+    background-color: #ff4081;
+    color: white;
+    transform: translate3d(-100%, 0, 0);
+    position: fixed;
+    top: 0;
+    z-index: 100;
+    transition: all 0.25s ease-out;
+    max-height: 100vh;
+    height: 100vh;
+
+    &.open {
+      transform: translate3d(0, 0, 0);
+      position: sticky;
+
+      header .menu {
+        transform: translate3d(0, 0, 0);
+        color: #fff;
+        background-color: transparent;
+      }
+    }
+
+    header {
+      display: flex;
+      justify-content: flex-start;
+
+      .home {
+        padding-right: 0.5rem;
+        flex-grow: 1;
+
+        .title {
+          font-size: 1.5rem;
+          font-weight: bold;
+        }
+      }
+
+      .menu {
+        font-size: 1.5rem;
+        cursor: pointer;
+        transform: translate3d(2.5rem, -0.5rem, 0);
+        color: #0009;
+        transition: color 0.25s ease-out 0.25s;
+        background-color: #fff6;
+        justify-self: center;
+        align-self: flex-start;
+        line-height: 1;
+        margin-top: 5px;
+
+        &:hover::before {
+          transform: rotate(-90deg);
+        }
+
+        &::before {
+          transition: all 0.25s ease;
+        }
+      }
+    }
+
+    .nav-group {
+      margin: 0.5rem 0;
+
+      .subheader {
+        font-weight: bold;
+      }
+
+      .nav-item {
+        padding-left: 0.5rem;
+        line-height: 1.5;
+        cursor: pointer;
+        text-shadow: 0 0 1px #0003;
+
+        &:hover {
+          text-shadow: 0 0 5px #000;
+        }
+
+        .mdi {
+          margin-right: 1rem;
+        }
+      }
+    }
+  }
+
+  .content {
+    flex-shrink: 0;
+    flex-grow: 1;
+    min-height: 100vh;
+  }
 }
 </style>
