@@ -22,7 +22,7 @@
       </section>
     </nav>
 
-    <router-view class="content" />
+    <router-view class="app-content" />
   </div>
 </template>
 
@@ -107,7 +107,7 @@ export default {
   }),
   watch: {
     showNav() {
-      window.dispatchEvent(new Event("resize"));
+      setTimeout(() => window.dispatchEvent(new Event("resize")), 300);
     },
   },
   methods: {
@@ -218,7 +218,7 @@ html {
     }
   }
 
-  .content {
+  .app-content {
     flex-shrink: 0;
     flex-grow: 1;
     min-height: 100vh;

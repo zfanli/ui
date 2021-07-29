@@ -57,10 +57,11 @@ This is a simple **markdown editor**.
   height: 100%;
 
   .editor {
-    padding: 3rem 2rem;
+    padding: 1.5rem;
     resize: none;
     outline: none;
     flex-basis: 45%;
+    font-size: 0.8rem;
   }
 
   .previewer {
