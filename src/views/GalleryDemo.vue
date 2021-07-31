@@ -6,11 +6,8 @@
 </template>
 
 <script>
-import Gallery from "../components/Gallery.vue";
-
 export default {
   name: "GalleryDemo",
-  components: { Gallery },
   data: () => {
     const images = [];
     for (let i = 1; i <= 36; i++) {

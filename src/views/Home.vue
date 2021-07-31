@@ -3,7 +3,7 @@
     <div class="text-h6">First page</div>
     Choose the ui part of the left side to see the demonstration of it.
 
-    <div>Test plugin: {{ mobile }}</div>
+    <div>Test plugin: {{ $tools.mobile }}</div>
   </v-container>
 </template>
 

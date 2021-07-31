@@ -25,7 +25,7 @@ export default {
   }),
   mounted() {
     window.addEventListener("mousemove", this.parallax);
-    if (this.$vuetify.breakpoint.mobile)
+    if (this.$tools.mobile)
       this.$refs.stage.style.transition = "transform .2s ease";
   },
   destroyed() {

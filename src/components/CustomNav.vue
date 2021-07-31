@@ -21,7 +21,6 @@
 
 <script>
 export default {
-  name: "CustomNav",
   props: {
     items: {
       type: Array,

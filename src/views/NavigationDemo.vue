@@ -9,11 +9,8 @@
 </template>
 
 <script>
-import Navigation from "../components/Navigation.vue";
-
 export default {
   name: "NavigationDemo",
-  components: { Navigation },
   data: () => ({
     items: [
       { name: "插画", link: "#illustration", color: "#e28869" },

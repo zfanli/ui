@@ -12,8 +12,8 @@
       :class="{
         'gallery-body': true,
         grid: true,
-        'gallery-column': $vuetify.breakpoint.mobile,
-        'gallery-row': !$vuetify.breakpoint.mobile,
+        'gallery-column': $tools.mobile,
+        'gallery-row': !$tools.mobile,
       }"
     >
       <div
@@ -36,7 +36,7 @@
     </div>
 
     <v-progress-linear
-      v-if="!$vuetify.breakpoint.mobile"
+      v-if="!$tools.mobile"
       class="progress"
       buffer-value="0"
       height="6"
@@ -47,7 +47,12 @@
       absolute
     ></v-progress-linear>
 
-    <div class="gallery-viewer-button-panel" v-show="curr !== -1" ref="panel">
+    <div
+      class="gallery-viewer-button-panel"
+      :class="{ show: showViewer }"
+      v-show="curr !== -1"
+      ref="panel"
+    >
       <div class="gallery-viewer-previewer" ref="viewer">
         <img alt="image" @click="closeViewer" />
         <v-snackbar v-model="alert" :timeout="timeout" centered absolute>
@@ -55,15 +60,18 @@
         </v-snackbar>
       </div>
 
-      <v-icon class="action-icon closable" @click="closeViewer">
-        mdi-close
-      </v-icon>
-      <v-icon class="action-icon prev" @click="showImage(-1)">
-        mdi-chevron-double-left
-      </v-icon>
-      <v-icon class="action-icon next" @click="showImage(1)">
-        mdi-chevron-double-right
-      </v-icon>
+      <div
+        class="action-icon closable mdi mdi-close"
+        @click="closeViewer"
+      ></div>
+      <div
+        class="action-icon prev mdi mdi-chevron-double-left"
+        @click="showImage(-1)"
+      ></div>
+      <div
+        class="action-icon next mdi mdi-chevron-double-right"
+        @click="showImage(1)"
+      ></div>
     </div>
   </div>
 </template>
@@ -110,6 +118,7 @@ export default {
     alert: false,
     timeout: 2000,
     showAll: false,
+    showViewer: false,
   }),
 
   computed: {
@@ -147,10 +156,10 @@ export default {
     onResize() {
       // resize the size of image wrappers
       const { clientHeight, clientWidth } = this.$refs.wrapper;
-      this.cellHeight = this.$vuetify.breakpoint.mobile
+      this.cellHeight = this.$tools.mobile
         ? Math.ceil((clientWidth / 2) * 0.4)
         : Math.ceil(clientHeight / 4);
-      this.cellWidth = this.$vuetify.breakpoint.mobile
+      this.cellWidth = this.$tools.mobile
         ? Math.ceil((clientWidth - 24) / 2)
         : Math.ceil(this.cellHeight * 0.45);
 
@@ -173,7 +182,7 @@ export default {
     bindAnimation() {
       if (this.timeline) this.timeline.kill();
       const { wrapper, body } = this.$refs;
-      const { mobile } = this.$vuetify.breakpoint;
+      const { mobile } = this.$tools;
       setTimeout(() => {
         const gap = body.clientWidth - wrapper.clientWidth;
         this.timeline = ScrollTrigger.create({
@@ -224,6 +233,7 @@ export default {
     viewer(i) {
       // ignore if image viewer is already displayed
       if (this.curr !== -1) return;
+      this.showViewer = true;
 
       // generate a scroll handler for prevent scrolling while the viewer is showing
       this.disableScrolling = (() => {
@@ -338,6 +348,7 @@ export default {
     },
 
     closeViewer() {
+      this.showViewer = false;
       // retrieve mouse wheel actions
       window.removeEventListener("wheel", this.disabling);
       // retrieve scroll events
@@ -365,6 +376,7 @@ export default {
   background-size: cover;
   background-position: center;
   position: relative;
+  overflow-x: hidden;
 
   .gallery-body.grid.gallery-row {
     height: 100vh;
@@ -507,6 +519,12 @@ export default {
     }
   }
 
+  &.show {
+    .action-icon {
+      opacity: 1;
+    }
+  }
+
   .action-icon {
     // use important to fix up the override caused by vuetify icon component
     position: absolute !important;
@@ -514,6 +532,8 @@ export default {
     cursor: pointer;
     color: white !important;
     text-shadow: 0 0 10px black;
+    opacity: 0;
+    transition: all 0.25s ease;
 
     &.closable {
       right: 1.5rem;

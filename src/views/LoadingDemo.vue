@@ -6,11 +6,8 @@
 </template>
 
 <script>
-import Loading from "../components/Loading.vue";
-
 export default {
   name: "LoadingDemo",
-  components: { Loading },
   data: () => ({
     progress: 0,
   }),

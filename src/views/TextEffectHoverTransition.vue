@@ -22,7 +22,6 @@ export default {
     window.addEventListener("resize", this.onResize);
   },
   destroyed() {
-    this.cleanup();
     window.removeEventListener("resize", this.onResize);
   },
   methods: {

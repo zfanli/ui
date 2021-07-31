@@ -13,12 +13,12 @@
       </div>
     </div>
     <div class="buttons">
-      <v-btn elevation="2" icon @click="up">
-        <v-icon>mdi-chevron-up</v-icon>
-      </v-btn>
-      <v-btn elevation="2" icon @click="down">
-        <v-icon>mdi-chevron-down</v-icon>
-      </v-btn>
+      <button class="icon" @click="up">
+        <i class="mdi mdi-chevron-up"></i>
+      </button>
+      <button class="icon" @click="down">
+        <i class="mdi mdi-chevron-down"></i>
+      </button>
     </div>
   </div>
 </template>
@@ -152,10 +152,21 @@ export default {
   padding: 1rem;
   display: flex;
   flex-direction: column;
+  font-size: 1rem;
 
-  button {
+  .icon {
     margin: 1rem;
     background-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 2px 10px 0 #0005;
+    border-radius: 50%;
+    width: 1.5em;
+    height: 1.5em;
+    background-color: #fff;
+    transition: all 0.25s ease;
+
+    &:hover {
+      background-color: #0001;
+    }
   }
 }
 </style>

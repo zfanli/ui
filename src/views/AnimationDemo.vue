@@ -45,8 +45,6 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { debounce } from "lodash";
 
-import CustomNav from "../components/CustomNav.vue";
-
 gsap.registerPlugin(ScrollTrigger);
 ScrollTrigger.defaults({
   start: "top top",
@@ -55,7 +53,6 @@ ScrollTrigger.defaults({
 
 export default {
   name: "AnimationDemo",
-  components: { CustomNav },
   data: () => {
     return {
       imageWidth: 0,
@@ -189,7 +186,7 @@ export default {
     onResize() {
       // Re-calculate the width and height.
       const { clientHeight, clientWidth } = this.$refs.bannerWrapper;
-      const { mobile } = this.$vuetify.breakpoint;
+      const { mobile } = this.$tools;
       const imageWidth =
           clientHeight / clientWidth <= 0.5626
             ? clientWidth

@@ -1,11 +1,5 @@
 <template>
-  <div class="timeline-wrapper">
-    <v-timeline class="timeline" align-top dense>
-      <v-timeline-item style="height: 100vh">timeline item</v-timeline-item>
-      <v-timeline-item>timeline item</v-timeline-item>
-      <v-timeline-item>timeline item</v-timeline-item>
-    </v-timeline>
-  </div>
+  <div class="timeline-wrapper">nothing here now</div>
 </template>
 
 <script>
