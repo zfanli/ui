@@ -7,19 +7,6 @@
 </template>
 
 <script>
-import marked from "marked";
-import hljs from "highlight.js";
-// import "highlight.js/styles/base16/material-darker.css";
-
-marked.setOptions({
-  renderer: new marked.Renderer(),
-  highlight: function (code, lang) {
-    const language = hljs.getLanguage(lang) ? lang : "plaintext";
-    return hljs.highlight(code, { language }).value;
-  },
-  langPrefix: "hljs language-",
-});
-
 export default {
   data: () => ({
     data: `# Hi there!
@@ -42,7 +29,7 @@ This is a simple **markdown editor**.
   }),
   computed: {
     parsed() {
-      return marked(this.data);
+      return this.$tools.marked(this.data);
     },
   },
 };
