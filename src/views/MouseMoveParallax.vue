@@ -64,7 +64,7 @@ export default {
   overflow: hidden;
 
   .stage {
-    background-color: #e0f2f180;
+    background-color: #b7f7f380;
     width: 400px;
     height: 400px;
     position: relative;
