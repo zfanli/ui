@@ -6,7 +6,10 @@
           <div class="title">UI Code Snippets</div>
           <div class="desc">The demonstration for ui parts.</div>
         </div>
-        <div class="menu mdi mdi-menu" @click="showNav = !showNav"></div>
+        <div
+          class="menu mdi mdi-menu"
+          @click="showNavModel = !showNavModel"
+        ></div>
       </header>
       <section class="nav-group" v-for="(nav, idx) in links" :key="idx">
         <div class="subheader" v-if="!!nav.subheader">{{ nav.subheader }}</div>
@@ -14,7 +17,10 @@
           class="nav-item"
           v-for="item in nav.items"
           :key="item.name"
-          @click="to(item.link)"
+          @click="
+            to(item.link);
+            showNavModel = true;
+          "
         >
           <i :class="['mdi', item.icon]"></i>
           <span>{{ item.name }}</span>
@@ -22,7 +28,7 @@
       </section>
     </nav>
 
-    <router-view class="app-content" />
+    <router-view class="app-content" :class="{ offset: showNav }" />
   </div>
 </template>
 
@@ -31,7 +37,7 @@ export default {
   name: "App",
 
   data: () => ({
-    showNav: true,
+    showNavModel: true,
     links: {
       parts: {
         subheader: "Parts",
@@ -105,6 +111,11 @@ export default {
       },
     },
   }),
+  computed: {
+    showNav() {
+      return this.$tools.mobile ? !this.showNavModel : this.showNavModel;
+    },
+  },
   watch: {
     showNav() {
       setTimeout(() => window.dispatchEvent(new Event("resize")), 300);
@@ -112,6 +123,8 @@ export default {
   },
   methods: {
     to(link) {
+      const { resolved } = this.$router.resolve(link);
+      if (resolved.name === this.$router.currentRoute.name) return;
       this.$router.push(link);
     },
   },
@@ -120,6 +133,7 @@ export default {
 
 <style lang="scss">
 @import "~bootstrap/scss/bootstrap.scss";
+@import "./App.css";
 
 html {
   overflow: hidden !important;
@@ -132,6 +146,7 @@ html {
 <style lang="scss" scoped>
 .app {
   min-height: 100vh;
+  max-width: 100vw;
   display: flex;
 
   nav {
@@ -142,10 +157,11 @@ html {
     transform: translate3d(-100%, 0, 0);
     position: fixed;
     top: 0;
-    z-index: 100;
+    z-index: 10;
     transition: all 0.25s ease-out;
     max-height: 100vh;
     height: 100vh;
+    width: 290px;
 
     &.open {
       transform: translate3d(0, 0, 0);
@@ -165,6 +181,7 @@ html {
       .home {
         padding-right: 0.5rem;
         flex-grow: 1;
+        cursor: pointer;
 
         .title {
           font-size: 1.5rem;
@@ -206,6 +223,7 @@ html {
         line-height: 1.5;
         cursor: pointer;
         text-shadow: 0 0 1px #0003;
+        transition: all 0.1s ease;
 
         &:hover {
           text-shadow: 0 0 5px #000;
@@ -222,6 +240,13 @@ html {
     flex-shrink: 0;
     flex-grow: 1;
     min-height: 100vh;
+    width: 100%;
+    max-width: 100%;
+
+    &.offset {
+      width: calc(100% - 290px);
+      max-width: calc(100% - 290px);
+    }
   }
 }
 </style>
