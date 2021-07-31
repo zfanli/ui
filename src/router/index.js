@@ -79,7 +79,7 @@ const routes = [
     name: "ParallaxPureCss",
     component: () =>
       import(
-        /* webpackChunkName: "ParallaxPureCss" */ "../views/ParallaxPureCss.vue"
+        /* webpackChunkName: "parallax-pure-css" */ "../views/ParallaxPureCss.vue"
       ),
   },
   {
@@ -87,7 +87,7 @@ const routes = [
     name: "MouseMoveParallax",
     component: () =>
       import(
-        /* webpackChunkName: "MouseMoveParallax" */ "../views/MouseMoveParallax.vue"
+        /* webpackChunkName: "mouse-move-parallax" */ "../views/MouseMoveParallax.vue"
       ),
   },
   {
@@ -95,7 +95,7 @@ const routes = [
     name: "MarkdownEditor",
     component: () =>
       import(
-        /* webpackChunkName: "MarkdownEditor" */ "../views/MarkdownEditor.vue"
+        /* webpackChunkName: "markdown-editor" */ "../views/MarkdownEditor.vue"
       ),
   },
 ];
