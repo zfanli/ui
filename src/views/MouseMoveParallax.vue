@@ -42,13 +42,10 @@ export default {
         offsetX = innerWidth / 2,
         offsetY = innerHeight / 2,
         // rotate the target base on the y axis means it'll be rotated in the horizontal direction,
-        // so we use the x value of movements of the cursor to calculate the result angles
-        rotateY = ((clientX - offsetX) / offsetX) * this.offset + "deg",
-        // and similarly we use the y value of movements of the cursor to calculate the rotateX angles,
-        // note that the x axis rotation move upward if it get a positive angle but we'll get a negative
-        // value if the cursor is moved to top side to the x axis, we want the target actually be rotated
-        // toward to the cursor, to do so we just reverse the value of the calculation
-        rotateX = -1 * ((clientY - offsetY) / offsetY) * this.offset + "deg";
+        // so we use the x value of movements to calculate the result angles
+        rotateY = -1 * ((clientX - offsetX) / offsetX) * this.offset + "deg",
+        // and similarly we use the y value of movements to calculate the rotateX angles
+        rotateX = ((clientY - offsetY) / offsetY) * this.offset + "deg";
 
       this.$refs.stage.style.transform = `rotateX(${rotateX}) rotateY(${rotateY}) rotateZ(0deg)`;
     },
