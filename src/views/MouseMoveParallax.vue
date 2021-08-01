@@ -35,17 +35,13 @@ export default {
     parallax(e) {
       const { clientX, clientY } = e,
         { innerWidth, innerHeight } = window,
-        // the offset result should be arranged between the range of [-offset, offset],
-        // so we can use the half of the window size to settle the middle lines of the viewpoint as the
-        // calculation base, we'll get a negative value of both axes if the cursor is moved to the top
-        // side to the x axis middle line or moved to the left side to the y axis middle line
         offsetX = innerWidth / 2,
         offsetY = innerHeight / 2,
         // rotate the target base on the y axis means it'll be rotated in the horizontal direction,
         // so we use the x value of movements to calculate the result angles
-        rotateY = -1 * ((clientX - offsetX) / offsetX) * this.offset + "deg",
+        rotateY = -1 * (clientX / offsetX - 1) * this.offset + "deg",
         // and similarly we use the y value of movements to calculate the rotateX angles
-        rotateX = ((clientY - offsetY) / offsetY) * this.offset + "deg";
+        rotateX = (clientY / offsetY - 1) * this.offset + "deg";
 
       this.$refs.stage.style.transform = `rotateX(${rotateX}) rotateY(${rotateY}) rotateZ(0deg)`;
     },
