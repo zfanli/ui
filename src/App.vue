@@ -2,9 +2,9 @@
   <div class="app">
     <nav :class="{ open: showNav }">
       <header>
-        <div class="home" @click="to('/')">
-          <div class="title">UI Code Snippets</div>
-          <div class="desc">The demonstration for ui parts.</div>
+        <div class="home">
+          <div class="title" @click="to('/')">UI Code Snippets</div>
+          <div class="desc">Snippets for inspiration and convenience.</div>
         </div>
         <div
           class="menu mdi mdi-menu"
@@ -17,10 +17,7 @@
           class="nav-item"
           v-for="item in nav.items"
           :key="item.name"
-          @click="
-            to(item.link);
-            showNavModel = true;
-          "
+          @click="to(item.link)"
         >
           <i :class="['mdi', item.icon]"></i>
           <span>{{ item.name }}</span>
@@ -88,6 +85,11 @@ export default {
             icon: "mdi-link",
           },
           {
+            name: "Text Effect: Hover Split Text",
+            link: "text-effect-hover-split-text",
+            icon: "mdi-link",
+          },
+          {
             name: "Parallax: Scroll, GSAP",
             link: "parallax",
             icon: "mdi-link",
@@ -123,6 +125,7 @@ export default {
   },
   methods: {
     to(link) {
+      this.showNavModel = true;
       const { resolved } = this.$router.resolve(link);
       if (resolved.name === this.$router.currentRoute.name) return;
       this.$router.push(link);
@@ -135,9 +138,6 @@ export default {
 @import "~bootstrap/scss/bootstrap.scss";
 @import "./App.css";
 
-html {
-  overflow: hidden !important;
-}
 html {
   overflow: auto !important;
 }
@@ -181,18 +181,18 @@ html {
       .home {
         padding-right: 0.5rem;
         flex-grow: 1;
-        cursor: pointer;
 
         .title {
           font-size: 1.5rem;
           font-weight: bold;
+          cursor: pointer;
         }
       }
 
       .menu {
         font-size: 1.5rem;
         cursor: pointer;
-        transform: translate3d(2.5rem, -0.5rem, 0);
+        transform: translate3d(3rem, 0, 0);
         color: #0009;
         transition: color 0.25s ease-out 0.25s;
         background-color: #fff6;
@@ -200,6 +200,7 @@ html {
         align-self: flex-start;
         line-height: 1;
         margin-top: 5px;
+        padding: 0 2.5px;
 
         &:hover::before {
           transform: rotate(-90deg);
