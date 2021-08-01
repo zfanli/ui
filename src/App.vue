@@ -141,11 +141,16 @@ export default {
 html {
   overflow: auto !important;
 }
+
+html,
+body {
+  height: 100%;
+}
 </style>
 
 <style lang="scss" scoped>
 .app {
-  min-height: 100vh;
+  min-height: 100%;
   max-width: 100vw;
   display: flex;
 
@@ -159,7 +164,7 @@ html {
     top: 0;
     z-index: 10;
     transition: all 0.25s ease-out;
-    max-height: 100vh;
+    max-height: 100%;
     height: 100vh;
     width: 290px;
 
@@ -240,7 +245,7 @@ html {
   .app-content {
     flex-shrink: 0;
     flex-grow: 1;
-    min-height: 100vh;
+    min-height: 100%;
     width: 100%;
     max-width: 100%;
 
