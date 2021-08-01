@@ -75,6 +75,14 @@ const routes = [
       ),
   },
   {
+    path: "/text-effect-hover-split-text",
+    name: "TextEffectHoverSplitText",
+    component: () =>
+      import(
+        /* webpackChunkName: "text-effect-hover-split-text" */ "../views/TextEffectHoverSplitText.vue"
+      ),
+  },
+  {
     path: "/parallax-pure-css",
     name: "ParallaxPureCss",
     component: () =>
