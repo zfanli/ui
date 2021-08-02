@@ -150,6 +150,7 @@ body {
 
 <style lang="scss" scoped>
 .app {
+  height: 100%;
   min-height: 100%;
   max-width: 100vw;
   display: flex;
