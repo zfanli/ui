@@ -12,15 +12,15 @@
 @function make-stars($n) {
   $value: 0 0 #fff;
   @for $i from 1 through $n {
-    $value: #{$value}, #{random(1000) / 10}vw #{random(2000) / 10}vh #fff;
+    $value: #{$value}, #{random(1000) / 10}vw #{random(1000) / 10}vh #fff;
   }
   @return $value;
 }
 
-$stars-large: make-stars(100);
-$stars-medium: make-stars(200);
-$stars-small: make-stars(600);
-$anime-duration: 20s;
+$stars-large: 100;
+$stars-small: 25;
+$stars-ratio: (1, 2, 6);
+$anime-duration: 40s;
 
 .wrapper {
   background-image: radial-gradient(
@@ -57,54 +57,62 @@ $anime-duration: 20s;
     }
   }
 
-  .stars:nth-child(3) {
+  .stars:nth-child(1) {
     height: 3px;
     width: 3px;
-    box-shadow: $stars-large;
     animation: star-moves $anime-duration * 3 linear infinite;
 
     &::after {
       height: 3px;
       width: 3px;
-      box-shadow: $stars-large;
     }
   }
 
   .stars:nth-child(2) {
     height: 2px;
     width: 2px;
-    box-shadow: $stars-medium;
     animation: star-moves $anime-duration * 2 linear infinite;
 
     &::after {
       height: 2px;
       width: 2px;
-      box-shadow: $stars-medium;
     }
   }
 
-  .stars:nth-child(1) {
+  .stars:nth-child(3) {
     height: 1px;
     width: 1px;
-    box-shadow: $stars-small;
     animation: star-moves $anime-duration linear infinite;
 
     &::after {
       height: 1px;
       width: 1px;
-      box-shadow: $stars-small;
+    }
+  }
+
+  @for $i from 1 through 3 {
+    .stars:nth-child(#{$i}),
+    .stars:nth-child(#{$i})::after {
+      box-shadow: make-stars($stars-large * nth($stars-ratio, $i));
+    }
+  }
+
+  @media screen and (max-width: 580px) {
+    @for $i from 1 through 3 {
+      .stars:nth-child(#{$i}),
+      .stars:nth-child(#{$i})::after {
+        box-shadow: make-stars($stars-small * nth($stars-ratio, $i));
+      }
     }
   }
 }
 
 @keyframes star-moves {
   from {
-    transform: translateY(0);
-    top: 0;
+    transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translateY(-100%);
-    top: -100vh;
+    transform: translate3d(0, -100vh, 0);
   }
 }
 </style>

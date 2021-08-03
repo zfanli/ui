@@ -149,7 +149,7 @@ html {
 
 html,
 body {
-  height: 100%;
+  min-height: 100%;
 }
 </style>
 
@@ -170,7 +170,7 @@ body {
     top: 0;
     z-index: 10;
     transition: all 0.25s ease-out;
-    max-height: 100%;
+    max-height: 100vh;
     height: 100vh;
     width: 290px;
 
@@ -251,7 +251,7 @@ body {
   .app-content {
     flex-shrink: 0;
     flex-grow: 1;
-    min-height: 100%;
+    min-height: 100vh;
     width: 100%;
     max-width: 100%;
 
