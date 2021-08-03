@@ -99,6 +99,14 @@ const routes = [
       ),
   },
   {
+    path: "/parallax-pixel-stars",
+    name: "ParallaxPixelStars",
+    component: () =>
+      import(
+        /* webpackChunkName: "parallax-pixel-stars" */ "../views/ParallaxPixelStars.vue"
+      ),
+  },
+  {
     path: "/markdown-editor",
     name: "MarkdownEditor",
     component: () =>

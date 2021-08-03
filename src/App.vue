@@ -105,6 +105,11 @@ export default {
             icon: "mdi-link",
           },
           {
+            name: "Parallax: Pixel Stars",
+            link: "parallax-pixel-stars",
+            icon: "mdi-link",
+          },
+          {
             name: "Markdown Editor",
             link: "markdown-editor",
             icon: "mdi-link",
