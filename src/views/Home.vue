@@ -8,7 +8,9 @@
     </p>
 
     <section>
-      <h5>Vue Plugin: Toolbox</h5>
+      <h5>
+        Vue Plugin: Toolbox, current component name: {{ $tools.componentName }}
+      </h5>
       <pre><code class="hljs" v-html="toolbox"></code></pre>
     </section>
   </v-container>
@@ -19,10 +21,18 @@ export default {
   name: "Home",
   computed: {
     toolbox() {
-      return this.$tools.hljs.highlight(JSON.stringify(this.$tools, null, 2), {
-        language: "javascript",
-      }).value;
+      return this.$tools.hljs.highlight(
+        JSON.stringify(Object.getPrototypeOf(this.$tools), null, 2),
+        {
+          language: "javascript",
+        }
+      ).value;
     },
+  },
+  mounted() {
+    console.log(this);
+    this.$tools.printName();
+    Object.getPrototypeOf(this.$tools).data = {};
   },
 };
 </script>

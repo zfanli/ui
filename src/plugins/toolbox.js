@@ -13,15 +13,43 @@ marked.setOptions({
 
 const toolbox = {
   install: (app) => {
-    // binding observed values
-    app.prototype.$tools = Vue.observable({ mobile: false });
-    // binding static tools
-    app.prototype.$tools.hljs = hljs;
-    app.prototype.$tools.marked = marked;
+    // // binding observed values
+    // const tools = Vue.observable({ mobile: false });
+    // // binding static tools
+    // tools.hljs = hljs;
+    // tools.marked = marked;
+
+    // tools.printName = (name) => console.log(name);
+
+    const Toolbox = function() {
+      console.log("created");
+    };
+    Toolbox.prototype.data = Vue.observable({ mobile: false });
+    Toolbox.prototype.hljs = hljs;
+    Toolbox.prototype.marked = marked;
+    Toolbox.prototype.printName = function() {
+      console.log(this.componentName);
+    };
+
+    app.mixin({
+      beforeCreate() {
+        Object.defineProperty(this, "$tools", {
+          value: new Toolbox(),
+          writable: false,
+        });
+        Object.defineProperty(this.$tools, "componentName", {
+          value: this.$options.name,
+          writable: false,
+        });
+
+        this.$tools.printName();
+        console.log(this.$tools.data);
+      },
+    });
 
     // handle observed value changes
     const detectMobile = () => {
-      app.prototype.$tools.mobile = window.innerWidth <= 580;
+      Toolbox.prototype.data.mobile = window.innerWidth <= 580;
     };
     window.addEventListener("resize", detectMobile);
     detectMobile();

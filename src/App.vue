@@ -120,7 +120,8 @@ export default {
   }),
   computed: {
     showNav() {
-      return this.$tools.mobile ? !this.showNavModel : this.showNavModel;
+      console.log(this.$tools.data.mobile);
+      return this.$tools.data.mobile ? !this.showNavModel : this.showNavModel;
     },
   },
   watch: {
