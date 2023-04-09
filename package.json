@@ -5,12 +5,16 @@
   "main": "index.js",
   "scripts": {
     "uv2": "pnpm --filter ui-vue2",
-    "ur": "pnpm --filter ui-react"
+    "ur": "pnpm --filter ui-react",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@commitlint/cli": "^17.5.1",
+    "@commitlint/config-conventional": "^17.4.4",
+    "husky": "^8.0.3",
     "prettier": "^2.8.7",
     "typescript": "^5.0.4"
   }
