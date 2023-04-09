@@ -7,7 +7,7 @@
       pls.
     </p>
 
-    <section>
+    <section class="home-wrapper">
       <h5>
         Vue Plugin: Toolbox, current component name: {{ $tools.componentName }}
       </h5>
@@ -18,25 +18,25 @@
 
 <script>
 export default {
-  name: "Home",
+  name: 'Home',
   computed: {
     toolbox() {
       return this.$tools.hljs.highlight(
         JSON.stringify(Object.getPrototypeOf(this.$tools), null, 2),
         {
-          language: "javascript",
+          language: 'javascript'
         }
-      ).value;
-    },
+      ).value
+    }
   },
   mounted() {
-    console.log(this);
-    this.$tools.printName();
-    Object.getPrototypeOf(this.$tools).data = {};
-  },
-};
+    console.log(this)
+    this.$tools.printName()
+    Object.getPrototypeOf(this.$tools).data = {}
+  }
+}
 </script>
 
-<style lang="scss" scoped>
-@import "~highlight.js/styles/base16/material-darker.css";
+<style lang="scss">
+@import 'highlight.js/styles/base16/material-darker.css';
 </style>

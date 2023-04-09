@@ -31,118 +31,118 @@
 
 <script>
 export default {
-  name: "App",
+  name: 'App',
 
   data: () => ({
     showNavModel: true,
     links: {
       parts: {
-        subheader: "Parts",
+        subheader: 'Parts',
         items: [
           {
-            name: "Album",
-            link: "album",
-            icon: "mdi-link",
+            name: 'Album',
+            link: 'album',
+            icon: 'mdi-link'
           },
           {
-            name: "Timeline",
-            link: "timeline",
-            icon: "mdi-link",
+            name: 'Timeline',
+            link: 'timeline',
+            icon: 'mdi-link'
           },
           {
-            name: "Loading: Animation",
-            link: "loading",
-            icon: "mdi-link",
+            name: 'Loading: Animation',
+            link: 'loading',
+            icon: 'mdi-link'
           },
           {
-            name: "Gallery: GSAP",
-            link: "gallery",
-            icon: "mdi-link",
+            name: 'Gallery: GSAP',
+            link: 'gallery',
+            icon: 'mdi-link'
           },
           {
-            name: "Navigation: GSAP + SVG",
-            link: "navigation",
-            icon: "mdi-link",
-          },
-        ],
+            name: 'Navigation: GSAP + SVG',
+            link: 'navigation',
+            icon: 'mdi-link'
+          }
+        ]
       },
       examples: {
-        subheader: "Examples",
+        subheader: 'Examples',
         items: [
           {
-            name: "Progress: ScrollTrigger",
-            link: "scrolling-progress",
-            icon: "mdi-link",
+            name: 'Progress: ScrollTrigger',
+            link: 'scrolling-progress',
+            icon: 'mdi-link'
           },
           {
-            name: "Banner: GIF animation",
-            link: "animation-demo",
-            icon: "mdi-link",
+            name: 'Banner: GIF animation',
+            link: 'animation-demo',
+            icon: 'mdi-link'
           },
           {
-            name: "Text Effect: Hover Transition",
-            link: "text-effect-hover-transition",
-            icon: "mdi-link",
+            name: 'Text Effect: Hover Transition',
+            link: 'text-effect-hover-transition',
+            icon: 'mdi-link'
           },
           {
-            name: "Text Effect: Hover Split Text",
-            link: "text-effect-hover-split-text",
-            icon: "mdi-link",
+            name: 'Text Effect: Hover Split Text',
+            link: 'text-effect-hover-split-text',
+            icon: 'mdi-link'
           },
           {
-            name: "Parallax: Scroll, GSAP",
-            link: "parallax",
-            icon: "mdi-link",
+            name: 'Parallax: Scroll, GSAP',
+            link: 'parallax',
+            icon: 'mdi-link'
           },
           {
-            name: "Parallax: Scroll, Pure CSS",
-            link: "parallax-pure-css",
-            icon: "mdi-link",
+            name: 'Parallax: Scroll, Pure CSS',
+            link: 'parallax-pure-css',
+            icon: 'mdi-link'
           },
           {
-            name: "Parallax: Mouse Move",
-            link: "mouse-move-parallax",
-            icon: "mdi-link",
+            name: 'Parallax: Mouse Move',
+            link: 'mouse-move-parallax',
+            icon: 'mdi-link'
           },
           {
-            name: "Parallax: Pixel Stars",
-            link: "parallax-pixel-stars",
-            icon: "mdi-link",
+            name: 'Parallax: Pixel Stars',
+            link: 'parallax-pixel-stars',
+            icon: 'mdi-link'
           },
           {
-            name: "Markdown Editor",
-            link: "markdown-editor",
-            icon: "mdi-link",
-          },
-        ],
-      },
-    },
+            name: 'Markdown Editor',
+            link: 'markdown-editor',
+            icon: 'mdi-link'
+          }
+        ]
+      }
+    }
   }),
   computed: {
     showNav() {
-      console.log(this.$tools.data.mobile);
-      return this.$tools.data.mobile ? !this.showNavModel : this.showNavModel;
-    },
+      console.log(this.$tools.data.mobile)
+      return this.$tools.data.mobile ? !this.showNavModel : this.showNavModel
+    }
   },
   watch: {
     showNav() {
-      setTimeout(() => window.dispatchEvent(new Event("resize")), 300);
-    },
+      setTimeout(() => window.dispatchEvent(new Event('resize')), 300)
+    }
   },
   methods: {
     to(link) {
-      this.showNavModel = true;
-      const { resolved } = this.$router.resolve(link);
-      if (resolved.name === this.$router.currentRoute.name) return;
-      this.$router.push(link);
-    },
-  },
-};
+      this.showNavModel = true
+      const { resolved } = this.$router.resolve(link)
+      if (resolved.name === this.$router.currentRoute.name) return
+      this.$router.push(link)
+    }
+  }
+}
 </script>
 
 <style lang="scss">
-@import "~bootstrap/scss/bootstrap.scss";
-@import "./App.css";
+@import 'bootstrap/scss/bootstrap.scss';
+@import './App.css';
 
 html {
   overflow: auto !important;

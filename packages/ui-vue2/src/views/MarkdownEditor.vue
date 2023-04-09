@@ -25,20 +25,21 @@ This is a simple **markdown editor**.
 </body>
 \`\`\`
 
-`,
+`
   }),
   computed: {
     parsed() {
-      return this.$tools.marked(this.data);
-    },
-  },
-};
+      return this.$tools.marked(this.data)
+    }
+  }
+}
 </script>
 
+<style lang="scss">
+@import 'highlight.js/styles/base16/material-lighter.css';
+</style>
 
 <style lang="scss" scoped>
-@import "~highlight.js/styles/base16/material-lighter.css";
-
 .editor-wrapper {
   display: flex;
   height: 100%;
