@@ -1,28 +1,7 @@
 {
-  "exclude": ["dist"],
-  "compilerOptions": {
-    "baseUrl": "./",
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "useDefineForClassFields": true,
-    "noImplicitThis": true,
-    "strict": true,
-    "jsx": "preserve",
-    "sourceMap": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "preserveValueImports": true,
-    "importsNotUsedAsValues": "error",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "lib": ["esnext", "dom"],
-    "skipLibCheck": true,
-    "allowJs": false
-  },
+  "files": [],
   "references": [
-    {
-      "path": "./packages/server/tsconfig.json"
-    }
+    { "path": "./packages/ui-vue2/tsconfig.json" },
+    { "path": "./packages/ui-react/tsconfig.json" }
   ]
 }

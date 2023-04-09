@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "v2": "pnpm --filter ui-vue2"
+    "uv2": "pnpm --filter ui-vue2",
+    "ur": "pnpm --filter ui-react"
   },
   "keywords": [],
   "author": "",
