@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SVG</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <svg width="100%" height="100%">
+      <defs>
+        <marker
+          id="arrowhead"
+          markerWidth="10"
+          markerHeight="7"
+          refX="0"
+          refY="3.5"
+          orient="auto"
+        >
+          <polygon points="0 0, 10 3.5, 0 7" />
+        </marker>
+      </defs>
+      <path
+        d="M 50 100 Q 200 50, 250 100"
+        stroke="black"
+        fill="none"
+        marker-end="url(#arrowhead)"
+      />
+    </svg>
+
+    <div
+      style="
+        position: absolute;
+        top: 100px;
+        left: 25px;
+        width: 50px;
+        height: 50px;
+        text-align: center;
+        line-height: 50px;
+      "
+    >
+      DIV 1
+    </div>
+
+    <div
+      style="
+        position: absolute;
+        top: 100px;
+        left: 225px;
+        width: 50px;
+        height: 50px;
+        text-align: center;
+        line-height: 50px;
+      "
+    >
+      DIV 2
+    </div>
+
+    <svg
+      height="50vh"
+      width="50vw"
+      style="
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+        position: absolute;
+        border: 1px solid #ccc;
+        display: none;
+      "
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M 50 50 C -50 50, 300 200, 200 200"
+        fill="transparent"
+        stroke="red"
+        stroke-width="5"
+      />
+
+      <path
+        d="M 110 215
+           A 30 50 0 0 1 162.55 162.45
+           L 172.55 152.45
+           A 30 50 -45 0 1 215.1 109.9
+           "
+        stroke="black"
+        fill="green"
+        stroke-width="2"
+        fill-opacity="0.5"
+      />
+    </svg>
+  </body>
+</html>

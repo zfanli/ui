@@ -1,14 +1,17 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useRef, useState } from 'react'
+
 import './App.css'
+import CurveArrow from './CurveArrow'
+import DraggableDiv from './DraggableDiv'
 
 function App() {
   const [count, setCount] = useState(0)
+  const startRef = useRef<HTMLDivElement>(null)
+  const endRef = useRef<HTMLDivElement>(null)
 
   return (
     <div className="App">
-      <div>
+      {/* <div>
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
@@ -27,7 +30,13 @@ function App() {
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
-      </p>
+      </p> */}
+
+      <CurveArrow />
+
+      <DraggableDiv ref={startRef}>start</DraggableDiv>
+
+      <DraggableDiv ref={endRef}>end</DraggableDiv>
     </div>
   )
 }
